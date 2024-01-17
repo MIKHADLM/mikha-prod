@@ -1,5 +1,5 @@
 import React from "react";
-import video from "../assets/videoBackground_compressed.mp4";
+import video from "../assets/background-homepage.mp4";
 import NavBar from "../components/NavBar";
 
 const Homepage = () => {
