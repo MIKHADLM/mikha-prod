@@ -1,38 +1,78 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2';
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Unstable_Grid2";
+import Miniature01 from "../assets/thumbnails/01.jpeg";
+import Miniature02 from "../assets/thumbnails/02.jpeg";
+import Miniature03 from "../assets/thumbnails/03.jpeg";
+import Miniature04 from "../assets/thumbnails/04.jpeg";
+import Miniature05 from "../assets/thumbnails/05.jpeg";
 
 const AllWork = () => {
   return (
-    <div className="bg-black bg-cover">
+    <div className="bg-black min-h-screen">
       <NavBar />
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={3}>
+        <Grid container spacing={1}>
+          <Grid item xs={4}>
             <img
-              src="https://ds.static.rtbf.be/article/image/1920x1080/f/a/9/69d658d0b2859e32cd4dc3b970c8496c-1686300001.jpg"
+              src={Miniature01}
               alt="thumbnail"
               className="object-cover h-full w-full cursor-pointer"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <img
-              src="https://www.nme.com/wp-content/uploads/2023/11/tupac-Shakur-696x442.jpg"
+              src={Miniature02}
               alt="thumbnail"
               className="object-cover h-full w-full cursor-pointer"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <img
-              src="https://generations.fr/media/news/2pac-est-plus-grand-que-biggie-et-jay-z-selon-melle-mel_64006a2346d0c.webp"
+              src={Miniature03}
               alt="thumbnail"
               className="object-cover h-full w-full cursor-pointer"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <img
-              src="https://ds.static.rtbf.be/article/image/1920x1080/f/a/9/69d658d0b2859e32cd4dc3b970c8496c-1686300001.jpg"
+              src={Miniature04}
+              alt="thumbnail"
+              className="object-cover h-full w-full cursor-pointer"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <img
+              src={Miniature05}
+              alt="thumbnail"
+              className="object-cover h-full w-full cursor-pointer"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <img
+              src={Miniature01}
+              alt="thumbnail"
+              className="object-cover h-full w-full cursor-pointer"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <img
+              src={Miniature02}
+              alt="thumbnail"
+              className="object-cover h-full w-full cursor-pointer"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <img
+              src={Miniature03}
+              alt="thumbnail"
+              className="object-cover h-full w-full cursor-pointer"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <img
+              src={Miniature04}
               alt="thumbnail"
               className="object-cover h-full w-full cursor-pointer"
             />
