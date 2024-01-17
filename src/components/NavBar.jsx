@@ -4,15 +4,15 @@ const NavBar = () => {
   return (
     <nav className="backdrop-blur-sm p-8">
       <div className="mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white font-bold">
+        <Link to="/" className="text-2xl text-white font-extrabold">
           MIKHA
         </Link>
         <div className="flex items-center space-x-10">
-          <Link to="/allwork" className="text-white hover:font-bold">
+          <Link to="/allwork" className="text-xl text-white hover:font-bold">
             ALL WORK
           </Link>
-          <Link to="/" className="text-white hover:font-bold">
-            A PROPOS
+          <Link to="/about" className="text-xl text-white hover:font-bold">
+            À PROPOS
           </Link>
         </div>
       </div>

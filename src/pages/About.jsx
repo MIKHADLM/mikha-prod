@@ -1,44 +1,65 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2';
+import Carte from "../assets/carte.gif";
+import RoiBoo from "../assets/perso.png";
 
 const About = () => {
   return (
-    <div className="bg-black bg-cover">
+    <div className="bg-black min-h-screen flex flex-col">
       <NavBar />
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={3}>
-            <img
-              src="https://ds.static.rtbf.be/article/image/1920x1080/f/a/9/69d658d0b2859e32cd4dc3b970c8496c-1686300001.jpg"
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <img
-              src="https://www.nme.com/wp-content/uploads/2023/11/tupac-Shakur-696x442.jpg"
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <img
-              src="https://generations.fr/media/news/2pac-est-plus-grand-que-biggie-et-jay-z-selon-melle-mel_64006a2346d0c.webp"
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <img
-              src="https://ds.static.rtbf.be/article/image/1920x1080/f/a/9/69d658d0b2859e32cd4dc3b970c8496c-1686300001.jpg"
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-        </Grid>
-      </Box>
+      <div className="flex flex-col p-5 flex-grow">
+        <div>
+          <div className="text-4xl font-bold text-white pt-5">
+            MICHAEL PHILIBERT
+          </div>
+          <div className="text-2xl text-white pb-10">
+            RÉALISATEUR / CADREUR / MONTEUR / VIDÉASTE FREELANCE
+          </div>
+          <div className="text-xl text-white py-5">
+            Enfant d'internet né en 2000, je fais des trucs avec une caméra et
+            mon ordinateur. <br />
+            Je teste, j'expérimente, j'apprends...
+          </div>
+          <button className="bg-white text-black p-3 w-80 h-15">
+            FICHIER MP3
+          </button>
+          <img src={Carte} alt="carte" className="w-80 h-80 pl-60" />
+          <div className="text-xl text-white py-5">
+            Toujours ouvert à de nombreux projets, n'hésitez pas à me contacter
+            en cas de questions !
+          </div>
+        </div>
+        <div className="flex-grow"></div>
+        <div className="flex flex-row justify-between leading-loose">
+          <div className="pt-5 flex flex-col">
+            <div className="text-xl font-bold text-white pb-2">
+              Localisations :
+            </div>
+            <div className="text-l text-white">Basé sur Lille, France</div>
+            <div className="text-l text-white">Déplacement possible</div>
+            <div className="text-l text-white">Titulaire d'un permis B</div>
+          </div>
+          <div className="pt-5 flex flex-col">
+            <div className="text-xl font-bold text-white pb-2">Diplômes :</div>
+            <div className="text-l text-white">
+              Détenteur d'une Licence Arts du spectable - Études
+              cinématographique
+            </div>
+            <div className="text-l text-white">
+              Détenteur d'une Licence Professionnelle Techniques et Activités de
+              l'Image et du Son
+            </div>
+            <div className="text-l text-white">
+              Convergence Internet Audiovisuel Numérique{" "}
+            </div>
+          </div>
+        </div>
+      </div>
+      <img
+        src={RoiBoo}
+        alt="RoiBoo"
+        className="absolute bottom-0 right-0 object-cover opacity-50"
+      />
     </div>
   );
 };
