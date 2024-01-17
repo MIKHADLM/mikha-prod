@@ -23,7 +23,7 @@ const About = () => {
           <button className="bg-white text-black p-3 w-80 h-15">
             FICHIER MP3
           </button>
-          <img src={Carte} alt="carte" className="w-80 h-80 pl-60" />
+          <img src={Carte} alt="carte" className="h-80 pl-60" />
           <div className="text-xl text-white py-5">
             Toujours ouvert à de nombreux projets, n'hésitez pas à me contacter
             en cas de questions !
@@ -31,7 +31,7 @@ const About = () => {
         </div>
         <div className="flex-grow"></div>
         <div className="flex flex-row justify-between leading-loose">
-          <div className="pt-5 flex flex-col">
+          <div className="pt-5 flex flex-col pl-20">
             <div className="text-xl font-bold text-white pb-2">
               Localisations :
             </div>
@@ -39,7 +39,7 @@ const About = () => {
             <div className="text-l text-white">Déplacement possible</div>
             <div className="text-l text-white">Titulaire d'un permis B</div>
           </div>
-          <div className="pt-5 flex flex-col">
+          <div className="pt-5 flex flex-col pr-20">
             <div className="text-xl font-bold text-white pb-2">Diplômes :</div>
             <div className="text-l text-white">
               Détenteur d'une Licence Arts du spectable - Études
