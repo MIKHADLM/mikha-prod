@@ -1,82 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
-import Miniature01 from "../assets/thumbnails/01.jpeg";
-import Miniature02 from "../assets/thumbnails/02.jpeg";
-import Miniature03 from "../assets/thumbnails/03.jpeg";
-import Miniature04 from "../assets/thumbnails/04.jpeg";
-import Miniature05 from "../assets/thumbnails/05.jpeg";
+import YouTube from "react-youtube";
+import Modal from "@mui/material/Modal";
 
 const AllWork = () => {
+  const videoLinks = [
+    "knEyW1NxPbQ",
+    "sluhYQHknao",
+    "O-W1xYAm1_U",
+    "CBdkIpn6DXA",
+    "3ymK5lk5GwM",
+    "FvXFbHNVub8",
+    "6U9_wur4HYI",
+    "6D30Fw37Zag",
+    "sZkU38eOzSs",
+  ];
+
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  const openVideo = (videoId) => {
+    setSelectedVideo(videoId);
+  };
+
+  const closeVideo = () => {
+    setSelectedVideo(null);
+  };
+
+  const opts = {
+    playerVars: {
+      autoplay: 1,
+    },
+  };
   return (
     <div className="bg-black min-h-screen">
       <NavBar />
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <img
-              src={Miniature01}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature02}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature03}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature04}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature05}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature01}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature02}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature03}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <img
-              src={Miniature04}
-              alt="thumbnail"
-              className="object-cover h-full w-full cursor-pointer"
-            />
-          </Grid>
+          {videoLinks.map((videoId, index) => (
+            <Grid item xs={4} key={index}>
+              <img
+                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                alt="thumbnail"
+                className="object-cover h-full w-full cursor-pointer"
+                onClick={() => openVideo(videoId)}
+                style={{ cursor: "pointer" }}
+              />
+              <Modal open={selectedVideo !== null} onClose={closeVideo}>
+                <div
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "80vh",
+                    width: "80vw",
+                  }}
+                >
+                  <YouTube videoId={selectedVideo} opts={opts} />
+                </div>
+              </Modal>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </div>
