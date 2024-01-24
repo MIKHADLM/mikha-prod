@@ -1,38 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
+const videoLinks = [
+  "knEyW1NxPbQ",
+  "sluhYQHknao",
+  "O-W1xYAm1_U",
+  "CBdkIpn6DXA",
+  "3ymK5lk5GwM",
+  "FvXFbHNVub8",
+  "6U9_wur4HYI",
+  "6D30Fw37Zag",
+  "sZkU38eOzSs",
+];
 
 const AllWork = () => {
-  const videoLinks = [
-    "knEyW1NxPbQ",
-    "sluhYQHknao",
-    "O-W1xYAm1_U",
-    "CBdkIpn6DXA",
-    "3ymK5lk5GwM",
-    "FvXFbHNVub8",
-    "6U9_wur4HYI",
-    "6D30Fw37Zag",
-    "sZkU38eOzSs",
-  ];
-
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const openVideo = (videoId) => {
-    setSelectedVideo(videoId);
-  };
+  useEffect(() => {
+    selectedVideo ? setOpen(true) : setOpen(false);
+  }, [selectedVideo]);
 
-  const closeVideo = () => {
-    setSelectedVideo(null);
-  };
-
-  const opts = {
-    playerVars: {
-      autoplay: 1,
-    },
-  };
   return (
     <div className="bg-black min-h-screen">
       <NavBar />
@@ -44,26 +35,18 @@ const AllWork = () => {
                 src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                 alt="thumbnail"
                 className="object-cover h-full w-full cursor-pointer"
-                onClick={() => openVideo(videoId)}
+                onClick={() => setSelectedVideo(videoId)}
                 style={{ cursor: "pointer" }}
               />
-              <Modal open={selectedVideo !== null} onClose={closeVideo}>
-                <div
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "80vh",
-                    width: "80vw",
-                  }}
-                >
-                  <YouTube videoId={selectedVideo} opts={opts} />
-                </div>
-              </Modal>
             </Grid>
           ))}
         </Grid>
       </Box>
+      <Modal open={open} onClose={() => setSelectedVideo(null)}>
+        <Box className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 outline-none scale-150">
+          <YouTube videoId={selectedVideo} />
+        </Box>
+      </Modal>
     </div>
   );
 };
