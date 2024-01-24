@@ -6,7 +6,7 @@ const Homepage = () => {
   return (
     <div className="main">
       <video
-        className="absolute z-10 w-auto min-w-full min-h-full max-w-none max-h-full object-cover"
+        className="absolute z-10 w-full h-full object-cover"
         src={video}
         autoPlay
         loop

@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
+
 const videoLinks = [
   "knEyW1NxPbQ",
   "sluhYQHknao",
@@ -23,7 +24,7 @@ const AllWork = () => {
   const opts = {
     playerVars: {
       autoplay: 1,
-      controls: 0,
+      controls: 1,
     },
   };
 
@@ -37,7 +38,7 @@ const AllWork = () => {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1}>
           {videoLinks.map((videoId, index) => (
-            <Grid item xs={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <img
                 src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                 alt="thumbnail"
