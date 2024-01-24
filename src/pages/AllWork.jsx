@@ -20,6 +20,13 @@ const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const opts = {
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+    },
+  };
+
   useEffect(() => {
     selectedVideo ? setOpen(true) : setOpen(false);
   }, [selectedVideo]);
@@ -44,7 +51,7 @@ const AllWork = () => {
       </Box>
       <Modal open={open} onClose={() => setSelectedVideo(null)}>
         <Box className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 outline-none scale-150">
-          <YouTube videoId={selectedVideo} />
+          <YouTube videoId={selectedVideo} opts={opts} />
         </Box>
       </Modal>
     </div>
