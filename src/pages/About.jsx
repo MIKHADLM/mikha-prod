@@ -1,7 +1,6 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import Carte from "../assets/carte.gif";
-import RoiBoo from "../assets/perso.png";
 
 const About = () => {
   return (
@@ -55,11 +54,6 @@ const About = () => {
           </div>
         </div>
       </div>
-      <img
-        src={RoiBoo}
-        alt="RoiBoo"
-        className="absolute bottom-0 right-0 object-cover opacity-50"
-      />
     </div>
   );
 };

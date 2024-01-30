@@ -5,6 +5,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
+//identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est vDrT7jFjC9Y
 const videoLinks = [
   "knEyW1NxPbQ",
   "sluhYQHknao",
@@ -51,7 +52,7 @@ const AllWork = () => {
         </Grid>
       </Box>
       <Modal open={open} onClose={() => setSelectedVideo(null)}>
-        <Box className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 outline-none scale-150">
+        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none">
           <YouTube videoId={selectedVideo} opts={opts} />
         </Box>
       </Modal>
