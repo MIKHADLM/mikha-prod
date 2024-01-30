@@ -8,9 +8,10 @@ const Homepage = () => {
       <video
         className="absolute z-10 w-full h-full object-cover"
         src={video}
-        autoPlay
         loop
         muted
+        playsInline
+        autoPlay
         style={{ zIndex: -1 }}
       />
       <NavBar />
