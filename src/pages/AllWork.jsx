@@ -43,7 +43,7 @@ const AllWork = () => {
               <img
                 src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                 alt="thumbnail"
-                className="object-cover h-full w-full cursor-pointer"
+                className="object-cover h-full w-full cursor-pointer hover:opacity-25"
                 onClick={() => setSelectedVideo(videoId)}
                 style={{ cursor: "pointer" }}
               />
@@ -52,7 +52,7 @@ const AllWork = () => {
         </Grid>
       </Box>
       <Modal open={open} onClose={() => setSelectedVideo(null)}>
-        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none">
+        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] lg:scale-150">
           <YouTube videoId={selectedVideo} opts={opts} />
         </Box>
       </Modal>
