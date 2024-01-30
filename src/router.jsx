@@ -8,13 +8,13 @@ export const router = createBrowserRouter([
   {
     element: <App />,
     children: [
-      { path: "/", element: <Homepage /> },
+      { path: "/mikha-prod/", element: <Homepage /> },
       {
-        path: "/allwork",
+        path: "/mikha-prod/allwork",
         element: <AllWork />,
       },
       {
-        path: "/about",
+        path: "/mikha-prod/about",
         element: <About />,
       },
     ],
