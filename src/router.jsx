@@ -10,11 +10,11 @@ export const router = createBrowserRouter([
     children: [
       { path: "/mikha-prod/", element: <Homepage /> },
       {
-        path: "/mikha-prod/allwork",
+        path: "/mikha-prod/allwork/",
         element: <AllWork />,
       },
       {
-        path: "/mikha-prod/about",
+        path: "/mikha-prod/about/",
         element: <About />,
       },
     ],
