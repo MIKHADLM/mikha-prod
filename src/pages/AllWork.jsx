@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/system/Box";
+import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
@@ -25,7 +25,7 @@ const AllWork = () => {
   const opts = {
     playerVars: {
       autoplay: 1,
-      controls: 1,
+      controls: 0,
     },
   };
 

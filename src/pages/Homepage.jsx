@@ -15,6 +15,10 @@ const Homepage = () => {
         style={{ zIndex: -1 }}
       />
       <NavBar />
+      <div className="text-white text-xl lg:text-2xl absolute bottom-0 left-0 p-8">
+        <div className=" font-bold ">MICHAEL PHILIBERT</div>
+        <div>RÉALISATEUR / DA / CADREUR / MONTEUR / VIDÉASTE FREELANCE</div>
+      </div>
     </div>
   );
 };

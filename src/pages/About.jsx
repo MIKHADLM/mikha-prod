@@ -1,55 +1,68 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import Carte from "../assets/carte.gif";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const About = () => {
   return (
     <div className="bg-black min-h-screen flex flex-col">
       <NavBar />
-      <div className="flex flex-col p-5 flex-grow">
+      <div className="flex flex-col p-8 flex-grow">
         <div>
           <div className="text-4xl font-bold text-white pt-5">
             MICHAEL PHILIBERT
           </div>
-          <div className="text-2xl text-white pb-10">
-            RÉALISATEUR / CADREUR / MONTEUR / VIDÉASTE FREELANCE
+          <div className="text-xl text-white pb-5">
+            RÉALISATEUR / DA / CADREUR / MONTEUR / VIDÉASTE FREELANCE
           </div>
-          <div className="text-xl text-white py-5">
-            Enfant d'internet né en 2000, je fais des trucs avec une caméra et
-            mon ordinateur. <br />
-            Je teste, j'expérimente, j'apprends...
+          <div className="text-xl text-white pb-8">
+            <span className="text-[#00FF00] text-2xl pr-3 font-extrabold">
+              ●
+            </span>
+            DISPONIBLE POUR TOUS PROJETS
           </div>
-          <button className="bg-white text-black p-3 w-80 h-15">
-            FICHIER MP3
-          </button>
-          <img src={Carte} alt="carte" className="h-80 pl-60" />
-          <div className="text-xl text-white py-5">
-            Toujours ouvert à de nombreux projets, n'hésitez pas à me contacter
-            en cas de questions !
+          <div className="text-xl text-white pb-1 font-semibold">Contact</div>
+          <div className="text-lg text-white font-thin">
+            <MailOutlineIcon /> contact@mikhaprod.com
           </div>
-        </div>
-        <div className="flex-grow"></div>
-        <div className="flex flex-row justify-between leading-loose">
-          <div className="pt-5 flex flex-col pl-20">
-            <div className="text-xl font-bold text-white pb-2">
-              Localisations :
+          <div className="text-lg text-white pb-5 font-thin">
+            <InstagramIcon /> mikha_dlm
+          </div>
+          <div className="text-xl text-white pb-1 font-semibold">
+            Enfant d'internet (expression)
+          </div>
+          <div className="text-lg text-white pb-5 font-thin">
+            Personne ayant été exposée assez jeune à Internet et ayant développé
+            <br />
+            une grande partie de ses compétences grâce à des outils numériques.
+          </div>
+          <div className="text-xl text-white pb-1 font-semibold">
+            Mon parcours
+          </div>
+          <div className="text-lg text-white pb-5 font-thin">
+            Passionné par la culture Hip-Hop, j'ai lancé en 2019 le projet DLM -
+            DEEP IN CULTURE,
+            <br /> un média Rap basé sur Rennes. De là, j'ai commencé à filmer
+            des concerts, des festivals, <br />
+            des clips mais j'i surtout découvert une nouvelle passion. Je me
+            suis formé de projet en projet, <br />
+            cherchant à m'améliorer constamment grâce à Internet et dans le
+            cadre de mes études.
+          </div>
+          <div className="text-xl text-white pb-1 font-semibold">Diplômes</div>
+          <div className="text-lg text-white pb-5 font-thin">
+            <div className="pl-5">
+              ● Détenteur d'une
+              <b> Licence Arts du spectacle - Etudes cinématographiques</b>
             </div>
-            <div className="text-l text-white">Basé sur Lille, France</div>
-            <div className="text-l text-white">Déplacement possible</div>
-            <div className="text-l text-white">Titulaire d'un permis B</div>
-          </div>
-          <div className="pt-5 flex flex-col pr-20">
-            <div className="text-xl font-bold text-white pb-2">Diplômes :</div>
-            <div className="text-l text-white">
-              Détenteur d'une Licence Arts du spectable - Études
-              cinématographique
-            </div>
-            <div className="text-l text-white">
-              Détenteur d'une Licence Professionnelle Techniques et Activités de
-              l'Image et du Son
-            </div>
-            <div className="text-l text-white">
-              Convergence Internet Audiovisuel Numérique{" "}
+            <div className="pl-5">
+              ● Détenteur d'une{" "}
+              <b>
+                Licence Professionnelle Techniques et Activités de l'Image et du
+                Son,
+                <br /> Convergence Internet Audiovisuel Numérique Arts du
+                spectacle
+              </b>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ const NavBar = () => {
   return (
     <nav className="backdrop-blur-sm p-4 lg:p-8">
       <div className="mx-auto flex justify-between items-center">
-        <Link to="/mikha-prod/" className="text-2xl text-white font-extrabold">
+        <Link to="/mikha-prod/" className="text-2xl text-white font-bold">
           MIKHA
         </Link>
         <div className="lg:flex items-center space-x-10">
