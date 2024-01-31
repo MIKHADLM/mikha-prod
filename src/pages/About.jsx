@@ -31,36 +31,32 @@ const About = () => {
           <div className="text-xl text-white pb-1 font-semibold inline">
             Enfant d'internet <span className="text-xs">(expression)</span>
           </div>
-          <div className="text-lg text-white pb-5 font-thin">
+          <div className="text-lg text-white pb-5 font-thin  lg:w-1/2">
             Personne ayant été exposée assez jeune à Internet et ayant développé
-            <br />
             une grande partie de ses compétences grâce à des outils numériques.
           </div>
           <div className="text-xl text-white pb-1 font-semibold">
             Mon parcours
           </div>
-          <div className="text-lg text-white pb-5 font-thin">
+          <div className="text-lg text-white pb-5 font-thin lg:w-1/2">
             Passionné par la culture Hip-Hop, j'ai lancé en 2019 le projet DLM -
-            DEEP IN CULTURE,
-            <br /> un média Rap basé sur Rennes. De là, j'ai commencé à filmer
-            des concerts, des festivals, <br />
-            des clips mais j'i surtout découvert une nouvelle passion. Je me
-            suis formé de projet en projet, <br />
-            cherchant à m'améliorer constamment grâce à Internet et dans le
-            cadre de mes études.
+            DEEP IN CULTURE, un média Rap basé sur Rennes. De là, j'ai commencé
+            à filmer des concerts, des festivals, des clips mais j'i surtout
+            découvert une nouvelle passion. Je me suis formé de projet en
+            projet, cherchant à m'améliorer constamment grâce à Internet et dans
+            le cadre de mes études.
           </div>
           <div className="text-xl text-white pb-1 font-semibold">Diplômes</div>
           <div className="text-lg text-white pb-5 font-thin pl-5">
-            <li>
-              Détenteur d'une
-              <b> Licence Arts du spectacle - Etudes cinématographiques</b>
+            <li className="lg:w-1/2">
+              Détenteur d'une{" "}
+              <b>Licence Arts du spectacle - Etudes cinématographiques</b>
             </li>
-            <li>
+            <li className="lg:w-1/2">
               Détenteur d'une{" "}
               <b>
                 Licence Professionnelle Techniques et Activités de l'Image et du
-                Son,
-                <br /> Convergence Internet Audiovisuel Numérique Arts du
+                Son, Convergence Internet Audiovisuel Numérique Arts du
                 spectacle
               </b>
             </li>
