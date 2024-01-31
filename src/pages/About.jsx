@@ -28,8 +28,8 @@ const About = () => {
           <div className="text-lg text-white pb-5 font-thin">
             <InstagramIcon /> mikha_dlm
           </div>
-          <div className="text-xl text-white pb-1 font-semibold">
-            Enfant d'internet (expression)
+          <div className="text-xl text-white pb-1 font-semibold inline">
+            Enfant d'internet <span className="text-xs">(expression)</span>
           </div>
           <div className="text-lg text-white pb-5 font-thin">
             Personne ayant été exposée assez jeune à Internet et ayant développé
@@ -50,20 +50,20 @@ const About = () => {
             cadre de mes études.
           </div>
           <div className="text-xl text-white pb-1 font-semibold">Diplômes</div>
-          <div className="text-lg text-white pb-5 font-thin">
-            <div className="pl-5">
-              ● Détenteur d'une
+          <div className="text-lg text-white pb-5 font-thin pl-5">
+            <li>
+              Détenteur d'une
               <b> Licence Arts du spectacle - Etudes cinématographiques</b>
-            </div>
-            <div className="pl-5">
-              ● Détenteur d'une{" "}
+            </li>
+            <li>
+              Détenteur d'une{" "}
               <b>
                 Licence Professionnelle Techniques et Activités de l'Image et du
                 Son,
                 <br /> Convergence Internet Audiovisuel Numérique Arts du
                 spectacle
               </b>
-            </div>
+            </li>
           </div>
         </div>
       </div>
