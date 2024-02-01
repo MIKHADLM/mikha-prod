@@ -2,8 +2,14 @@ import React from "react";
 import NavBar from "../components/NavBar";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
+import EnfantInternet from "../assets/Enfant_Internet.mp3";
 
 const About = () => {
+  function playAudio() {
+    document.getElementById("audiomp3").play();
+  }
+
   return (
     <div className="bg-black min-h-screen flex flex-col">
       <NavBar />
@@ -28,9 +34,17 @@ const About = () => {
           <div className="text-lg text-white pb-5 font-thin">
             <InstagramIcon /> mikha_dlm
           </div>
-          <div className="text-xl text-white pb-1 font-semibold inline">
-            Enfant d'internet <span className="text-xs">(expression)</span>
+          <div className="text-xl text-white font-semibold inline">
+            Enfant d'internet{" "}
+            <span className="text-xs">
+              (expression){" "}
+              <VolumeUpOutlinedIcon
+                onClick={playAudio}
+                className="cursor-pointer mb-2"
+              />
+            </span>
           </div>
+          <audio id="audiomp3" src={EnfantInternet} type="audio/mp3"></audio>
           <div className="text-lg text-white pb-5 font-thin  lg:w-1/2">
             Personne ayant été exposée assez jeune à Internet et ayant développé
             une grande partie de ses compétences grâce à des outils numériques.
