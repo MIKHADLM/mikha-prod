@@ -52,7 +52,7 @@ const AllWork = () => {
         </Grid>
       </Box>
       <Modal open={open} onClose={() => setSelectedVideo(null)}>
-        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] lg:scale-150">
+        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] md:scale-125 lg:scale-150">
           <YouTube videoId={selectedVideo} opts={opts} />
         </Box>
       </Modal>
