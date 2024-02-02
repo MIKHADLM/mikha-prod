@@ -5,17 +5,23 @@ import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
-//id youtube et date des vidéos à afficher
+//identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est knEyW1NxPbQ
 const videoLinks = [
-  { id: "knEyW1NxPbQ", date: "2023" },
-  { id: "sluhYQHknao", date: "2023" },
-  { id: "O-W1xYAm1_U", date: "2023" },
-  { id: "CBdkIpn6DXA", date: "2023" },
-  { id: "3ymK5lk5GwM", date: "2023" },
-  { id: "FvXFbHNVub8", date: "2023" },
-  { id: "6U9_wur4HYI", date: "2023" },
-  { id: "6D30Fw37Zag", date: "2023" },
-  { id: "sZkU38eOzSs", date: "2023" },
+  "sluhYQHknao",
+  "O-W1xYAm1_U",
+  "6U9_wur4HYI",
+  "CBdkIpn6DXA",
+  "Z0_4QqZ2Kds",
+  "yg2-kGgDzWc",
+  "x_r44LMz5mM",
+  "lGEnx4fI55Y",
+  "imncgWS0T44",
+  "0LUBZK_XaVo",
+  "FvXFbHNVub8",
+  "6D30Fw37Zag",
+  "sZkU38eOzSs",
+  "rO9bcfW52qM",
+  "pbRF4prArZo",
 ];
 
 const AllWork = () => {
