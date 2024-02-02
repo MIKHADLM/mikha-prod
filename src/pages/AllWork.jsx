@@ -5,21 +5,22 @@ import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
-//identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est vDrT7jFjC9Y
+//id youtube et date des vidéos à afficher
 const videoLinks = [
-  "knEyW1NxPbQ",
-  "sluhYQHknao",
-  "O-W1xYAm1_U",
-  "CBdkIpn6DXA",
-  "3ymK5lk5GwM",
-  "FvXFbHNVub8",
-  "6U9_wur4HYI",
-  "6D30Fw37Zag",
-  "sZkU38eOzSs",
+  { id: "knEyW1NxPbQ", date: "2023" },
+  { id: "sluhYQHknao", date: "2023" },
+  { id: "O-W1xYAm1_U", date: "2023" },
+  { id: "CBdkIpn6DXA", date: "2023" },
+  { id: "3ymK5lk5GwM", date: "2023" },
+  { id: "FvXFbHNVub8", date: "2023" },
+  { id: "6U9_wur4HYI", date: "2023" },
+  { id: "6D30Fw37Zag", date: "2023" },
+  { id: "sZkU38eOzSs", date: "2023" },
 ];
 
 const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [hoveredVideo, setHoveredVideo] = useState(null);
   const [open, setOpen] = useState(false);
 
   const opts = {
@@ -38,15 +39,26 @@ const AllWork = () => {
       <NavBar />
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1}>
-          {videoLinks.map((videoId, index) => (
+          {videoLinks.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-              <img
-                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                alt="thumbnail"
-                className="object-cover h-full w-full cursor-pointer hover:opacity-25"
-                onClick={() => setSelectedVideo(videoId)}
-                style={{ cursor: "pointer" }}
-              />
+              <div
+                className="relative"
+                onMouseEnter={() => setHoveredVideo(video)}
+                onMouseLeave={() => setHoveredVideo(null)}
+              >
+                <img
+                  src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                  alt="thumbnail"
+                  className="object-cover h-full w-full cursor-pointer hover:opacity-25"
+                  onClick={() => setSelectedVideo(video.id)}
+                  style={{ cursor: "pointer" }}
+                />
+                {hoveredVideo === video && (
+                  <span className="font-semibold absolute bottom-1 left-1 text-white">
+                    {video.date}
+                  </span>
+                )}
+              </div>
             </Grid>
           ))}
         </Grid>
