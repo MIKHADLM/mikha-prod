@@ -12,11 +12,14 @@ const videoLinks = [
   "6U9_wur4HYI",
   "CBdkIpn6DXA",
   "Z0_4QqZ2Kds",
+  "x_r44LMz5mM",
   "imncgWS0T44",
   "knEyW1NxPbQ",
   "FvXFbHNVub8",
   "6D30Fw37Zag",
   "sZkU38eOzSs",
+  "rO9bcfW52qM",
+  "pbRF4prArZo",
 ];
 
 const AllWork = () => {
