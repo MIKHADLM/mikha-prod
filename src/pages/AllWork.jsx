@@ -7,10 +7,12 @@ import Modal from "@mui/material/Modal";
 
 //identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est knEyW1NxPbQ
 const videoLinks = [
-  "knEyW1NxPbQ",
   "sluhYQHknao",
   "O-W1xYAm1_U",
   "CBdkIpn6DXA",
+  "Z0_4QqZ2Kds",
+  "imncgWS0T44",
+  "knEyW1NxPbQ",
   "3ymK5lk5GwM",
   "FvXFbHNVub8",
   "6U9_wur4HYI",
