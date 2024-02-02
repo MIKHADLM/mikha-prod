@@ -5,7 +5,7 @@ import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
-//identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est vDrT7jFjC9Y
+//identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est knEyW1NxPbQ
 const videoLinks = [
   "knEyW1NxPbQ",
   "sluhYQHknao",
