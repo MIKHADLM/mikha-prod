@@ -10,13 +10,13 @@ const NavBar = () => {
         </Link>
         <div className="lg:flex items-center space-x-10">
           <Link
-            to="/mikha-prod/allwork"
+            to="/mikha-prod/allwork/"
             className="text-lg text-white hover:font-bold"
           >
             ALL WORK
           </Link>
           <Link
-            to="/mikha-prod/about"
+            to="/mikha-prod/about/"
             className="text-lg text-white hover:font-bold"
           >
             À PROPOS
