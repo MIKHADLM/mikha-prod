@@ -34,7 +34,7 @@ jobs:
     if: ${{ needs.retrieve-project.outputs.deployment-enabled == 'true' }}
     uses: ./.github/workflows/mikha-prod-build.yaml
     with:
-      site-url: https://mikhaprod.com
+      site-url: https://mikhaprod.com/portfolio
       branch-id: ${{ needs.retrieve-project.outputs.branch-id }}
     secrets: inherit
 
