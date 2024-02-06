@@ -9,7 +9,7 @@ const NavBar = () => {
           MIKHA
         </Link>
         <div className="lg:flex items-center space-x-10">
-          <Link to="/llwork/" className="text-lg text-white hover:font-bold">
+          <Link to="/allwork/" className="text-lg text-white hover:font-bold">
             ALL WORK
           </Link>
           <Link to="/about/" className="text-lg text-white hover:font-bold">
