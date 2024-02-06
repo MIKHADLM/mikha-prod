@@ -9,5 +9,13 @@ export default defineConfig({
   resolve: {
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
   },
-  extensions: ['.jsx', '.js']
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+  },
 });
