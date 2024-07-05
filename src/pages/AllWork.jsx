@@ -42,10 +42,10 @@ const AllWork = () => {
   }, [selectedVideo]);
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-black min-h-screen overflow-x-hidden">
       <NavBar />
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={1}>
+      <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+        <Grid container spacing={1} style={{ margin: 0, width: '100%' }}>
           {videoLinks.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <div
