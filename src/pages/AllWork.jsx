@@ -10,6 +10,7 @@ const videoLinks = [
   { id: "O0Ys-U2_FEE", date: "2024" },
   { id: "ZVE95wJM9is", date: "2024" },
   { id: "rpgbOMxSljk", date: "2024" },
+  { id: "86rCW1UEFKA", date: "2024" },
   { id: "EOI3If7TVyQ", date: "2024" },
   { id: "gDHglCewJVY", date: "2024" },
   { id: "sluhYQHknao", date: "2023" },
