@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 //identifiants des videos à afficher, ex : https://www.youtube.com/watch?v=knEyW1NxPbQ l'id est knEyW1NxPbQ
 const videoLinks = [
   { id: "O0Ys-U2_FEE", date: "2024" },
+  { id: "dFraOpFdEy0", date: "2024" },
   { id: "ZVE95wJM9is", date: "2024" },
   { id: "rpgbOMxSljk", date: "2024" },
   { id: "86rCW1UEFKA", date: "2024" },
