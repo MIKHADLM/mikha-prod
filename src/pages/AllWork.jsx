@@ -12,7 +12,7 @@ const videoLinks = [
   { id: "ZVE95wJM9is", date: "2024" },
   { id: "rpgbOMxSljk", date: "2024" },
   { id: "86rCW1UEFKA", date: "2024" },
-  { id: "EOI3If7TVyQ", date: "2024" },
+  { id: "EOI3If7TVyQ", date: "2024\nMotion Design - Montage" },
   { id: "gDHglCewJVY", date: "2024" },
   { id: "sluhYQHknao", date: "2023" },
   { id: "O-W1xYAm1_U", date: "2023" },
