@@ -12,10 +12,11 @@ const theme = createTheme({
   },
 });
 
+// Remplacer la ligne suivante pour inclure le `basename` dans le RouterProvider
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} basename="/mikha-prod" /> {/* Ajouter le basename ici */}
     </ThemeProvider>
   </React.StrictMode>
 );
