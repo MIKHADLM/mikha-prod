@@ -59,7 +59,7 @@ const AllWork = () => {
 
   const handleClick = (video) => {
     if (isMobile) {
-      setHoveredVideo(video);
+      setHoveredVideo(video); // Sur mobile, on gère le hover après le clic
     }
     setSelectedVideo(video.id);
   };
@@ -83,7 +83,7 @@ const AllWork = () => {
                   alt="thumbnail"
                   className="object-cover h-full w-full group-hover:opacity-25"
                 />
-                {/* Only show text if hovered or clicked (on mobile) */}
+                {/* Only show text if opacity is active (hover or click) */}
                 {(hoveredVideo === video || (isMobile && hoveredVideo === video)) && (
                   <span className="font-semibold absolute bottom-1 left-1 text-white opacity-100">
                     {video.date.split("\n").map((line, index) => (
