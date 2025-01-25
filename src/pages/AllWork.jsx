@@ -55,7 +55,7 @@ const AllWork = () => {
           {videoLinks.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                <div
-                className="relative hover:opacity-25"
+                className="relative group"
                 onMouseEnter={() => setHoveredVideo(video)}
                 onMouseLeave={() => setHoveredVideo(null)}
                 style={{ cursor: "pointer" }}
@@ -63,11 +63,11 @@ const AllWork = () => {
                 <img
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt="thumbnail"
-                  className="object-cover h-full w-full"
+                  className="object-cover h-full w-full group-hover:opacity-25"
                   onClick={() => setSelectedVideo(video.id)}
                 />
                 {hoveredVideo === video && (
-                  <span className="font-semibold absolute bottom-1 left-1 text-white">
+                  <span className="font-semibold absolute bottom-1 left-1 text-white opacity-100">
                     {video.date.split("\n").map((line, index) => (
                       <React.Fragment key={index}>
                         {line}
