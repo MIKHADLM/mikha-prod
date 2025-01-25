@@ -54,17 +54,17 @@ const AllWork = () => {
         <Grid container spacing={1} style={{ margin: 0, width: '100%' }}>
           {videoLinks.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-              <div
-                className="relative"
+               <div
+                className="relative hover:opacity-25"
                 onMouseEnter={() => setHoveredVideo(video)}
                 onMouseLeave={() => setHoveredVideo(null)}
-              >
+                style={{ cursor: "pointer" }}
+               >
                 <img
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt="thumbnail"
-                  className="object-cover h-full w-full cursor-pointer hover:opacity-25"
+                  className="object-cover h-full w-full"
                   onClick={() => setSelectedVideo(video.id)}
-                  style={{ cursor: "pointer" }}
                 />
                 {hoveredVideo === video && (
                   <span className="font-semibold absolute bottom-1 left-1 text-white">
