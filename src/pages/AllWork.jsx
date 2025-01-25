@@ -35,6 +35,7 @@ const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const opts = {
     playerVars: {
@@ -45,7 +46,23 @@ const AllWork = () => {
 
   useEffect(() => {
     selectedVideo ? setOpen(true) : setOpen(false);
+    
+    // Détection si l'utilisateur utilise un appareil mobile
+    setIsMobile(window.innerWidth <= 768); // ou utiliser un hook de détection de mobile plus précis
   }, [selectedVideo]);
+
+  const handleMouseEnter = (video) => {
+    if (!isMobile) {
+      setHoveredVideo(video);
+    }
+  };
+
+  const handleClick = (video) => {
+    if (isMobile) {
+      setHoveredVideo(video);
+    }
+    setSelectedVideo(video.id);
+  };
 
   return (
     <div className="bg-black min-h-screen overflow-x-hidden">
@@ -54,19 +71,19 @@ const AllWork = () => {
         <Grid container spacing={1} style={{ margin: 0, width: '100%' }}>
           {videoLinks.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-               <div
+              <div
                 className="relative group"
-                onMouseEnter={() => setHoveredVideo(video)}
-                onMouseLeave={() => setHoveredVideo(null)}
+                onMouseEnter={() => handleMouseEnter(video)} // Only works on desktop
+                onMouseLeave={() => setHoveredVideo(null)} 
+                onClick={() => handleClick(video)} // Works on both mobile and desktop
                 style={{ cursor: "pointer" }}
-               >
+              >
                 <img
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt="thumbnail"
                   className="object-cover h-full w-full group-hover:opacity-25"
-                  onClick={() => setSelectedVideo(video.id)}
                 />
-                {hoveredVideo === video && (
+                {(hoveredVideo === video || isMobile) && (
                   <span className="font-semibold absolute bottom-1 left-1 text-white opacity-100">
                     {video.date.split("\n").map((line, index) => (
                       <React.Fragment key={index}>
