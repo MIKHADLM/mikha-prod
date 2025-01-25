@@ -83,7 +83,8 @@ const AllWork = () => {
                   alt="thumbnail"
                   className="object-cover h-full w-full group-hover:opacity-25"
                 />
-                {(hoveredVideo === video || isMobile) && (
+                {/* Only show text if hovered or clicked (on mobile) */}
+                {(hoveredVideo === video || (isMobile && hoveredVideo === video)) && (
                   <span className="font-semibold absolute bottom-1 left-1 text-white opacity-100">
                     {video.date.split("\n").map((line, index) => (
                       <React.Fragment key={index}>
