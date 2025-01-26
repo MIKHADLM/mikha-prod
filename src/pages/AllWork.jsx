@@ -42,6 +42,12 @@ const AllWork = () => {
     },
   };
 
+  // Fonction pour gérer la sélection d'une vidéo
+  const handleThumbnailClick = (videoId) => {
+    setSelectedVideo(videoId);
+    setOpen(true); // Ouvre le modal
+  };
+
   return (
     <div className="bg-black min-h-screen overflow-x-hidden">
       {/* Barre de navigation */}
@@ -53,8 +59,8 @@ const AllWork = () => {
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <div
                 className="relative group"
-                onClick={() => setSelectedVideo(video.id)}
                 style={{ cursor: "pointer" }}
+                onClick={() => handleThumbnailClick(video.id)} // Gère le clic
               >
                 {/* Miniature de la vidéo */}
                 <img
@@ -78,9 +84,9 @@ const AllWork = () => {
       </Box>
 
       {/* Modal pour afficher le lecteur YouTube */}
-      <Modal open={open} onClose={() => setSelectedVideo(null)}>
+      <Modal open={open} onClose={() => setOpen(false)}>
         <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] md:scale-125 lg:scale-150">
-          <YouTube videoId={selectedVideo} opts={opts} />
+          {selectedVideo && <YouTube videoId={selectedVideo} opts={opts} />}
         </Box>
       </Modal>
     </div>
@@ -88,4 +94,3 @@ const AllWork = () => {
 };
 
 export default AllWork;
-
