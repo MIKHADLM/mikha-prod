@@ -15,6 +15,9 @@ const NavBar = () => {
           <Link to="/about/" className="text-lg text-white hover:font-bold">
             À PROPOS
           </Link>
+          <Link to="/contact/" className="text-lg text-white hover:font-bold">
+            CONTACT
+          </Link>
         </div>
       </div>
     </nav>
@@ -22,3 +25,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
