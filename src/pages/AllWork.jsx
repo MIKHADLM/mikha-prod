@@ -5,10 +5,30 @@ import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 
+// Liste complète des vidéos
 const videoLinks = [
   { id: "O0Ys-U2_FEE", date: "2024\nCréation intégrale" },
   { id: "dFraOpFdEy0", date: "2024\nMontage - Colorimétrie" },
-  // Ajoute les autres vidéos ici...
+  { id: "ZVE95wJM9is", date: "2024\nCréation intégrale" },
+  { id: "rpgbOMxSljk", date: "2024\nCréation intégrale" },
+  { id: "86rCW1UEFKA", date: "2024\nRéalisation - Montage" },
+  { id: "EOI3If7TVyQ", date: "2024\nInterview - Motion Design - Montage" },
+  { id: "gDHglCewJVY", date: "2024\nCréation intégrale" },
+  { id: "sluhYQHknao", date: "2023\nCréation intégrale" },
+  { id: "O-W1xYAm1_U", date: "2023\nCréation intégrale" },
+  { id: "6U9_wur4HYI", date: "2023" },
+  { id: "CBdkIpn6DXA", date: "2023\nCréation intégrale" },
+  { id: "Z0_4QqZ2Kds", date: "2023\nCréation intégrale" },
+  { id: "yg2-kGgDzWc", date: "2023\nCréation intégrale" },
+  { id: "x_r44LMz5mM", date: "2022\nCréation intégrale" },
+  { id: "lGEnx4fI55Y", date: "2022\nCréation intégrale" },
+  { id: "imncgWS0T44", date: "2022\nCréation intégrale" },
+  { id: "0LUBZK_XaVo", date: "2022" },
+  { id: "FvXFbHNVub8", date: "2021" },
+  { id: "6D30Fw37Zag", date: "2020" },
+  { id: "sZkU38eOzSs", date: "2020" },
+  { id: "rO9bcfW52qM", date: "2020" },
+  { id: "pbRF4prArZo", date: "2020" },
 ];
 
 const AllWork = () => {
@@ -24,7 +44,9 @@ const AllWork = () => {
 
   return (
     <div className="bg-black min-h-screen overflow-x-hidden">
+      {/* Barre de navigation */}
       <NavBar />
+
       <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
         <Grid container spacing={1} style={{ margin: 0, width: "100%" }}>
           {videoLinks.map((video, index) => (
@@ -34,14 +56,14 @@ const AllWork = () => {
                 onClick={() => setSelectedVideo(video.id)}
                 style={{ cursor: "pointer" }}
               >
-                {/* Miniature */}
+                {/* Miniature de la vidéo */}
                 <img
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt="thumbnail"
-                  className="object-cover h-full w-full group-hover:opacity-25 group-focus:opacity-25"
+                  className="object-cover h-full w-full group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
                 />
-                {/* Texte */}
-                <span className="absolute bottom-1 left-1 text-white opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 font-semibold">
+                {/* Texte associé à la miniature */}
+                <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity">
                   {video.date.split("\n").map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
@@ -54,7 +76,8 @@ const AllWork = () => {
           ))}
         </Grid>
       </Box>
-      {/* Modal pour le lecteur YouTube */}
+
+      {/* Modal pour afficher le lecteur YouTube */}
       <Modal open={open} onClose={() => setSelectedVideo(null)}>
         <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] md:scale-125 lg:scale-150">
           <YouTube videoId={selectedVideo} opts={opts} />
@@ -65,3 +88,4 @@ const AllWork = () => {
 };
 
 export default AllWork;
+
