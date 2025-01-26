@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .group:hover img,
+  .group:focus img {
+    opacity: 0.25;
+  }
+
+  .group:hover span,
+  .group:focus span {
+    opacity: 1;
+  }
+
+  span {
+    transition: opacity 0.3s ease-in-out;
+  }
+}
