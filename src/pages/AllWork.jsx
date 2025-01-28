@@ -4,6 +4,15 @@ import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
+import { Helmet } from "react-helmet";
+
+<Helmet>
+  <title>Réalisation de Mikha, vidéaste indépendant de Lille</title>
+  <meta
+    name="description"
+    content="Voici toutes les réalisations de Mikha, vidéaste freelance français basé sur Lille. Vous y trouverez des réalisations de clips, des vidéos d'entreprises, des montages Youtube."
+  />
+</Helmet>
 
 // Liste complète des vidéos
 const videoLinks = [
