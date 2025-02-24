@@ -4,7 +4,6 @@ import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
-import { Helmet } from "react-helmet";
 
 // Liste complète des vidéos
 const videoLinks = [
@@ -50,23 +49,8 @@ const AllWork = () => {
     setOpen(true); // Ouvre le modal
   };
 
-  // Récupère la description de la vidéo sélectionnée
-  const selectedVideoDetails = videoLinks.find((video) => video.id === selectedVideo);
-
   return (
     <div className="bg-black min-h-screen overflow-x-hidden">
-      <Helmet>
-        <title>Réalisation de Mikha, vidéaste indépendant de Lille</title>
-        <meta
-          name="description"
-          content={
-            selectedVideoDetails
-              ? selectedVideoDetails.description
-              : "Découvrez toutes les réalisations de Mikha, vidéaste freelance basé à Lille, avec des créations intégrales, des montages et des vidéos d'entreprise."
-          }
-        />
-      </Helmet>
-
       {/* Barre de navigation */}
       <NavBar />
 
@@ -111,3 +95,4 @@ const AllWork = () => {
 };
 
 export default AllWork;
+
