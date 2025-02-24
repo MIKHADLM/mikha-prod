@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet";
 // Liste complète des vidéos
 const videoLinks = [
   { id: "O0Ys-U2_FEE", date: "2024\nCréation intégrale", description: "TEST" },
+  { id: "KDkNl5MbF_k", date: "2024\nMontage - Colorimétrie", description: "TEST" },
   { id: "dFraOpFdEy0", date: "2024\nMontage - Colorimétrie" },
   { id: "ZVE95wJM9is", date: "2024\nCréation intégrale" },
   { id: "rpgbOMxSljk", date: "2024\nCréation intégrale" },
