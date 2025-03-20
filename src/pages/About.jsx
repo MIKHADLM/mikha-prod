@@ -11,7 +11,7 @@ const About = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen overflow-x-hidden pt-14 px-4">
+    <div className="bg-black min-h-screen overflow-x-hidden pt-14 px-0">
       <NavBar />
       <div className="flex flex-col p-8 flex-grow">
         <div>
