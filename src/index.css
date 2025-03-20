@@ -16,4 +16,9 @@
   span {
     transition: opacity 0.3s ease-in-out;
   }
+
+  /* Ajout du padding-top pour éviter que le contenu passe derrière la navbar */
+  .allwork, .about {
+    padding-top: 60px; /* Ajustez cette valeur en fonction de la hauteur de votre navbar */
+  }
 }

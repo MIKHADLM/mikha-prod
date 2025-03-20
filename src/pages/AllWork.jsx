@@ -50,7 +50,7 @@ const AllWork = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen overflow-x-hidden">
+    <div className="bg-black min-h-screen overflow-x-hidden pt-24 px-4">
       {/* Barre de navigation */}
       <NavBar />
 
