@@ -50,7 +50,7 @@ const AllWork = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen overflow-x-hidden pt-24 px-4">
+    <div className="bg-black min-h-screen overflow-x-hidden pt-24 px-0">
       {/* Barre de navigation */}
       <NavBar />
 
@@ -67,7 +67,7 @@ const AllWork = () => {
                 <img
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt={`Miniature de la vidéo ${video.date.replace("\n", " - ")}`}
-                  className="object-cover h-full w-full group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
+                  className="w-full h-auto block object-cover group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
                 /> 
                 {/* Texte associé à la miniature */}
                 <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity font-semibold">
