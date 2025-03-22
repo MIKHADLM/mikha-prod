@@ -5,6 +5,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
 import EnfantInternet from "../assets/Enfant_Internet.mp3";
 import Photo_mikha_1 from "../assets/Photo_mikha_1.jpg";
+import VC_1 from "/src/assets/VC_1.png";
 
 const About = () => {
   function playAudio() {
@@ -37,6 +38,7 @@ const About = () => {
             {/*
             <MailOutlineIcon /> contact@mikhaprod.com
             */}
+          </div>
           </div>
           <div 
             className="text-lg text-white pb-5 font-thin">
@@ -77,34 +79,45 @@ const About = () => {
           </div>
 
           <div className="text-xl text-white pb-1 font-semibold text-left">
+          <br/>
             Derrière mais aussi devant la caméra ! 
-          </div>
-          <div className="text-lg text-white pb-5 font-thin lg:w-1/2 text-left text-justify">
             <br/>
-              Depuis 2024, je prends énormément de plaisir à créer du contenu, que ce soit pour mes propres réseaux ou pour le média Hip-Hop RapMinute. Cette activité me permet d'expérimenter différents formats et d'affiner ma vision de la création digitale.
-            <br/>
-            <br/>
-            Avec plus d'un million de vues cumulées sur mes vidéos, j'ai beaucoup appris sur l'importance du storytelling ainsi que sur l'impact d'un montage qualitatif et percutant. Fort de cette expérience, j'accompagne aujourd'hui créateurs de contenu et entrepreneurs dans leur communication.
             <br/>
           </div>
 
-          <div className="text-xl text-white pb-1 font-semibold text-left">Diplômes</div>
-          {/* Suppression de pl-5 pour bien centrer la liste */}
-          <div className="text-lg text-white pb-5 font-thin">
-            <li className="lg:w-1/2">
-              Détenteur d'une{" "}
-              <b>Licence Arts du spectacle - Études cinématographiques</b>
-            </li>
-            <li className="lg:w-1/2">
-              Détenteur d'une{" "}
-              <b>
-                Licence Professionnelle Techniques et Activités de l'Image et du
-                Son, Convergence Internet Audiovisuel Numérique Arts du
-                spectacle
-              </b>
-            </li>
-          </div>
-        </div>
+          <div className="flex items-center space-x-8 lg:w-1/2">
+  {/* Image à gauche */}
+  <img 
+    src={VC_1} 
+    alt="Description" 
+    className="w-1/2 object-cover rounded-lg" 
+  />
+
+  {/* Texte à droite */}
+  <div className="text-lg text-white font-thin text-left text-justify">
+    <p>
+      Depuis 2024, je prends énormément de plaisir à créer du contenu, que ce soit pour mes propres réseaux ou pour le média Hip-Hop RapMinute. Cette activité me permet d'expérimenter différents formats et d'affiner ma vision de la création digitale.
+    </p>
+    <br />
+    <p>
+      Avec plus d'un million de vues cumulées sur mes vidéos, j'ai beaucoup appris sur l'importance du storytelling ainsi que sur l'impact d'un montage qualitatif et percutant. Fort de cette expérience, j'accompagne aujourd'hui créateurs de contenu et entrepreneurs dans leur communication.
+    </p>
+  </div>
+</div>
+
+{/* Diplômes en dessous */}
+<div className="lg:w-1/2 mt-8">  
+  <div className="text-xl text-white pb-1 font-semibold text-left">Diplômes</div>
+  <div className="text-lg text-white pb-5 font-thin">
+    <li>
+      Détenteur d'une <b>Licence Arts du spectacle - Études cinématographiques</b>
+    </li>
+    <li>
+      Détenteur d'une <b>Licence Professionnelle Techniques et Activités de l'Image et du Son, Convergence Internet Audiovisuel Numérique Arts du spectacle</b>
+    </li>
+  </div>
+</div>
+
       </div>
     </div>
   );
