@@ -7,32 +7,36 @@ import Modal from "@mui/material/Modal";
 
 // Liste complète des vidéos
 const videoLinks = [
-  { id: "O0Ys-U2_FEE", date: "2024\nCréation intégrale", description: "TEST" },
-  { id: "KDkNl5MbF_k", date: "2024\nMontage - Colorimétrie", description: "TEST" },
-  { id: "dFraOpFdEy0", date: "2024\nMontage - Colorimétrie" },
-  { id: "ZVE95wJM9is", date: "2024\nCréation intégrale" },
-  { id: "rpgbOMxSljk", date: "2024\nCréation intégrale" },
-  { id: "86rCW1UEFKA", date: "2024\nRéalisation - Montage" },
-  { id: "EOI3If7TVyQ", date: "2024\nInterview - Motion Design - Montage" },
-  { id: "gDHglCewJVY", date: "2024\nCréation intégrale" },
-  { id: "sluhYQHknao", date: "2023\nCréation intégrale" },
-  { id: "O-W1xYAm1_U", date: "2023\nCréation intégrale" },
-  { id: "6U9_wur4HYI", date: "2023\nRéalisation" },
-  { id: "CBdkIpn6DXA", date: "2023\nCréation intégrale" },
-  { id: "Z0_4QqZ2Kds", date: "2023\nCréation intégrale" },
-  { id: "yg2-kGgDzWc", date: "2023\nCréation intégrale" },
-  { id: "x_r44LMz5mM", date: "2022\nCréation intégrale" },
-  { id: "lGEnx4fI55Y", date: "2022\nCréation intégrale" },
-  { id: "imncgWS0T44", date: "2022\nCréation intégrale" },
-  { id: "0LUBZK_XaVo", date: "2022\nCoréalisation intégrale" },
-  { id: "FvXFbHNVub8", date: "2021\nCoréalisation intégrale" },
-  { id: "6D30Fw37Zag", date: "2020\nCoréalisation intégrale" },
-  { id: "sZkU38eOzSs", date: "2020\nCoréalisation intégrale" },
-  { id: "rO9bcfW52qM", date: "2020\nRéalisation - Montage - Titrage" },
-  { id: "pbRF4prArZo", date: "2020\nCadrage - Montage" },
+  { id: "O0Ys-U2_FEE", category: ["Clip musicaux"], date: "2024\nCréation intégrale", description: "TEST" },
+  { id: "KDkNl5MbF_k", category: ["Publicité"], date: "2024\nMontage - Colorimétrie", description: "TEST" },
+  { id: "dFraOpFdEy0", category: ["Publicité"], date: "2024\nMontage - Colorimétrie" },
+  { id: "ZVE95wJM9is", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
+  { id: "rpgbOMxSljk", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
+  { id: "86rCW1UEFKA", category: ["Vidéos YouTube"], date: "2024\nRéalisation - Montage" },
+  { id: "EOI3If7TVyQ", category: ["Vidéos YouTube"], date: "2024\nInterview - Motion Design - Montage" },
+  { id: "gDHglCewJVY", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
+  { id: "sluhYQHknao", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
+  { id: "O-W1xYAm1_U", category: ["Vidéos YouTube", "Clip musicaux"], date: "2023\nCréation intégrale" },
+  { id: "6U9_wur4HYI", category: ["Clip musicaux"], date: "2023\nRéalisation" },
+  { id: "CBdkIpn6DXA", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
+  { id: "Z0_4QqZ2Kds", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
+  { id: "yg2-kGgDzWc", category: ["Clip musicaux", "Publicité"], date: "2023\nCréation intégrale" },
+  { id: "x_r44LMz5mM", category: ["Clip musicaux", "Publicité"], date: "2022\nCréation intégrale" },
+  { id: "lGEnx4fI55Y", category: ["Clip musicaux", "Publicité"], date: "2022\nCréation intégrale" },
+  { id: "imncgWS0T44", category: ["Clip musicaux"], date: "2022\nCréation intégrale" },
+  { id: "0LUBZK_XaVo", category: ["Publicité"], date: "2022\nCoréalisation intégrale" },
+  { id: "FvXFbHNVub8", category: ["Clip musicaux"], date: "2021\nCoréalisation intégrale" },
+  { id: "6D30Fw37Zag", category: ["Clip musicaux"], date: "2020\nCoréalisation intégrale" },
+  { id: "sZkU38eOzSs", category: ["Clip musicaux"], date: "2020\nCoréalisation intégrale" },
+  { id: "rO9bcfW52qM", category: ["Clip musicaux"], date: "2020\nRéalisation - Montage - Titrage" },
+  { id: "pbRF4prArZo", category: ["Publicité", "Clip musicaux"], date: "2020\nCadrage - Montage" },
 ];
 
+// Liste des catégories
+const categories = ["Toutes les vidéos", "Clip musicaux", "Publicité", "Vidéos YouTube", "Vidéos courtes"];
+
 const AllWork = () => {
+  const [selectedCategory, setSelectedCategory] = useState("Toutes les vidéos");
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -42,6 +46,11 @@ const AllWork = () => {
       controls: 0,
     },
   };
+
+  // Fonction pour filtrer les vidéos selon la catégorie
+  const filteredVideos = selectedCategory === "Toutes les vidéos"
+    ? videoLinks
+    : videoLinks.filter(video => video.category.includes(selectedCategory)); // Utilisation de includes()
 
   // Fonction pour gérer la sélection d'une vidéo
   const handleThumbnailClick = (videoId) => {
@@ -54,9 +63,22 @@ const AllWork = () => {
       {/* Barre de navigation */}
       <NavBar />
 
+      {/* Boutons de filtrage */}
+      <div className="flex flex-wrap justify-center space-x-4 mb-6">
+        {categories.map(category => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-4 py-2 rounded-lg text-white ${selectedCategory === category ? "bg-blue-500" : "bg-gray-700 hover:bg-gray-600"} transition duration-300`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
       <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
         <Grid container spacing={1} style={{ margin: 0, width: "100%" }}>
-          {videoLinks.map((video, index) => (
+          {filteredVideos.map((video, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <div
                 className="relative group"
@@ -68,14 +90,14 @@ const AllWork = () => {
                   src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
                   alt={`Miniature de la vidéo ${video.date.replace("\n", " - ")}`}
                   className="w-full h-auto block object-cover group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
-                /> 
+                />
                 {/* Texte associé à la miniature */}
                 <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity font-semibold">
                   {video.date.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                  {line}
-                  <br />
-                  </React.Fragment>
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
                   ))}
                 </span>
               </div>
@@ -95,4 +117,3 @@ const AllWork = () => {
 };
 
 export default AllWork;
-
