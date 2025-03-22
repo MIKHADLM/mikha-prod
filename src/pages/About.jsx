@@ -85,15 +85,15 @@ const About = () => {
             <br/>
           </div>
 
-          <div className="flex items-center space-x-8 lg:w-1/2">
-  {/* Image à gauche */}
+          <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8 lg:w-1/2">
+  {/* Image au-dessus sur mobile, à gauche sur desktop */}
   <img 
     src={VC_1} 
     alt="Description" 
-    className="w-1/2 object-cover rounded-lg" 
+    className="w-full lg:w-1/2 object-cover rounded-lg" 
   />
 
-  {/* Texte à droite */}
+  {/* Texte en dessous sur mobile, à droite sur desktop */}
   <div className="text-lg text-white font-thin text-left text-justify">
     <p>
       Depuis 2024, je prends énormément de plaisir à créer du contenu, que ce soit pour mes propres réseaux ou pour le média Hip-Hop RapMinute. Cette activité me permet d'expérimenter différents formats et d'affiner ma vision de la création digitale.
@@ -104,6 +104,7 @@ const About = () => {
     </p>
   </div>
 </div>
+
 
 {/* Diplômes en dessous */}
 <div className="lg:w-1/2 mt-8">  
