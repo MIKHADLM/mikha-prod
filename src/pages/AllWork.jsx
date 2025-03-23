@@ -17,6 +17,21 @@ const videoLinks = [
   { id: "gDHglCewJVY", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
   { id: "sluhYQHknao", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
   { id: "O-W1xYAm1_U", category: ["Vidéos YouTube", "Clip musicaux"], date: "2023\nCréation intégrale" },
+  
+
+  { id: "ECOo4thLKDU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "UI7MMOgIXsU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  /*
+  { id: "2JNtt1O9MYU&t=35s", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  */
+  { id: "86VfBropop8", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "_UY40shea04", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "OGMQz6qc7n4", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "8BaWi8OhkAA", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "bnxD8wXO354", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "uFFZNJLYuX0", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "oPlys0qw6aI", category: ["Vidéos YouTube"], date: "2023\nMontage" },
+  { id: "_pxjMa0HAsc", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "6U9_wur4HYI", category: ["Clip musicaux"], date: "2023\nRéalisation" },
   { id: "CBdkIpn6DXA", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
   { id: "Z0_4QqZ2Kds", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
