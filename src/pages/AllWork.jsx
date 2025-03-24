@@ -4,6 +4,8 @@ import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
+import { PopupWidget } from "react-calendly";
+
 
 // Liste complète des vidéos
 const videoLinks = [
@@ -127,7 +129,20 @@ const AllWork = () => {
           {selectedVideo && <YouTube videoId={selectedVideo} opts={opts} />}
         </Box>
       </Modal>
+
+      {/* Widget Calendly */}
+      <div className="flex justify-center mt-6">
+        <PopupWidget
+          url="https://calendly.com/mikha-vizion/30min"
+          rootElement={document.getElementById("root")}
+          text="Prendre un rendez-vous"
+          textColor="#ffffff"
+          color="#4f46e5"
+        />
+      </div>
     </div>
+
+    
   );
 };
 

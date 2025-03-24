@@ -6,6 +6,7 @@ import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
 import EnfantInternet from "../assets/Enfant_Internet.mp3";
 import Photo_mikha_1 from "../assets/Photo_mikha_1.jpg";
 import VC_1 from "/src/assets/VC_1.png";
+import { PopupWidget } from "react-calendly";
 
 const About = () => {
   function playAudio() {
@@ -103,6 +104,16 @@ const About = () => {
       Avec plus d'un million de vues cumulées sur mes vidéos, j'ai beaucoup appris sur l'importance du storytelling ainsi que sur l'impact d'un montage qualitatif et percutant. Fort de cette expérience, j'accompagne aujourd'hui créateurs de contenu et entrepreneurs dans leur communication.
     </p>
   </div>
+  {/* Widget Calendly */}
+        <div className="flex justify-center mt-6">
+          <PopupWidget
+            url="https://calendly.com/mikha-vizion/30min"
+            rootElement={document.getElementById("root")}
+            text="Prendre un rendez-vous"
+            textColor="#ffffff"
+            color="#4f46e5"
+          />
+        </div>
 </div>
 
 

@@ -3,7 +3,7 @@ import App from "./App";
 import Homepage from "./pages/Homepage";
 import AllWork from "./pages/AllWork";
 import About from "./pages/About";
-import Contact from "./pages/Contact"; // Import de la page Contact
+import Contact2 from "./pages/Contact2";
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +19,8 @@ export const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/contact/", // Nouvelle route pour la page Contact
-        element: <Contact />,
+        path: "/contact/",
+        element: <Contact2 />,
       },
     ],
   },
