@@ -39,7 +39,7 @@ const NavBar = () => {
               location.pathname === "/allwork/" ? "font-bold" : "hover:font-bold"
             }`}
           >
-            ALL WORK
+            PORTFOLIO
           </Link>
           <Link
             to="/about/"
@@ -47,7 +47,15 @@ const NavBar = () => {
               location.pathname === "/about/" ? "font-bold" : "hover:font-bold"
             }`}
           >
-            À PROPOS
+              À PROPOS
+          </Link>
+          <Link
+            to="/Contact/"
+            className={`text-lg text-white ${
+              location.pathname === "/Contact/" ? "font-bold" : "hover:font-bold"
+            }`}
+          >
+            CONTACT
           </Link>
         </div>
       </div>

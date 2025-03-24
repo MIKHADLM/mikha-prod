@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PopupWidget } from "react-calendly";
+import NavBar from "../components/NavBar";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -20,105 +20,132 @@ const Contact = () => {
     e.preventDefault();
     console.log("Données du formulaire envoyées :", formData);
     alert("Votre message a été envoyé !");
-    // Ici, tu pourras ajouter l'envoi vers un backend ou un service comme Formspree
+  };
+
+  // Fonction pour ouvrir le pop-up Calendly
+  const openCalendlyPopup = () => {
+    window.Calendly.initPopupWidget({ url: "https://calendly.com/mikha-vizion/30min" });
   };
 
   return (
-    <div className="bg-black min-h-screen flex flex-col items-center justify-center p-6 text-white">
-      <h1 className="text-6xl font-bold mb-6">Un Projet ? <br/>Une question ?</h1>
+    <div className="bg-black min-h-screen flex flex-col p-0 text-white pt-24">
 
-      {/* Formulaire de contact */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg"
-      >
-        <label className="block mb-2">Votre demande concerne *</label>
-        <select
-          name="demande"
-          value={formData.demande}
-          onChange={handleChange}
-          required
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        >
-          <option value="">Sélectionnez une option</option>
-          <option value="Projet vidéo">Un projet vidéo</option>
-          <option value="Collaboration">Demande de collaboration</option>
-        </select>
+      {/* Barre de navigation */}
+      <NavBar />
+      
+      <div className="w-full flex justify-center">
+        <div className="w-full md:w-1/2 text-left">
+          <h1 className="text-8xl font-bold mb-6 leading-tight">
+            Une question ? <br /> Un projet ?
+          </h1>
+        </div>
+      </div>
 
-        <label className="block mb-2">Nom *</label>
-        <input
-          type="text"
-          name="nom"
-          value={formData.nom}
-          onChange={handleChange}
-          required
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        />
+      {/* Contenu principal en deux colonnes */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl mx-auto mt-12">
+        
+        {/* Colonne gauche - Texte d'introduction */}
+        <div className="w-full md:w-1/2 text-left">
+          <h1 className="text-5xl font-bold mb-6 leading-tight">
+            Mikha est prêt à vous répondre !
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Vous avez une idée, une collaboration en tête ou vous souhaitez en savoir plus sur mes services ?
+            <br />
+            Remplissez le formulaire ou prenez directement un rendez-vous pour un appel.
+          </p>
 
-        <label className="block mb-2">Prénom *</label>
-        <input
-          type="text"
-          name="prenom"
-          value={formData.prenom}
-          onChange={handleChange}
-          required
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        />
+          {/* Bouton pour ouvrir le pop-up Calendly */}
+          <button
+            onClick={openCalendlyPopup}
+            className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+          >
+            Réserver un appel !
+          </button>
+        </div>
 
-        <label className="block mb-2">Entreprise</label>
-        <input
-          type="text"
-          name="entreprise"
-          value={formData.entreprise}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        />
+        {/* Colonne droite - Formulaire */}
+        <div className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+          <form onSubmit={handleSubmit}>
+            <select
+              name="demande"
+              value={formData.demande}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            >
+              <option value="">Votre demande concerne *</option>
+              <option value="Projet vidéo">Un projet vidéo</option>
+              <option value="Collaboration">Demande de collaboration</option>
+              <option value="Autre">Autre</option>
+            </select>
 
-        <label className="block mb-2">Email *</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        />
+            <input
+              type="text"
+              name="nom"
+              value={formData.nom}
+              onChange={handleChange}
+              required
+              placeholder="Nom*"
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            />
 
-        <label className="block mb-2">Téléphone</label>
-        <input
-          type="tel"
-          name="telephone"
-          value={formData.telephone}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        />
+            <input
+              type="text"
+              name="prenom"
+              value={formData.prenom}
+              onChange={handleChange}
+              required
+              placeholder="Prénom*"
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            />
 
-        <label className="block mb-2">Dites-moi en plus sur votre projet</label>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          rows="4"
-          className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-        ></textarea>
+            <input
+              type="text"
+              name="entreprise"
+              value={formData.entreprise}
+              onChange={handleChange}
+              placeholder="Entreprise"
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded"
-        >
-          Envoyer
-        </button>
-      </form>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Email*"
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            />
 
-      {/* Widget Calendly */}
-      <div className="mt-6">
-        <PopupWidget
-          url="https://calendly.com/mikha-vizion/30min"
-          rootElement={document.getElementById("root")}
-          text="Prendre un rendez-vous"
-          textColor="#ffffff"
-          color="#4f46e5"
-        />
+            <input
+              type="tel"
+              name="telephone"
+              value={formData.telephone}
+              onChange={handleChange}
+              placeholder="Téléphone"
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            />
+
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              rows="4"
+              placeholder="Dites-moi en plus sur votre projet*"
+              required
+              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+            ></textarea>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded"
+            >
+              Envoyer
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

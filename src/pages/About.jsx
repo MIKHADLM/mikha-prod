@@ -111,7 +111,7 @@ const About = () => {
           <PopupWidget
             url="https://calendly.com/mikha-vizion/30min"
             rootElement={document.getElementById("root")}
-            text="Prendre un rendez-vous"
+            text="Réserver un appel !"
             textColor="#ffffff"
             color="#4f46e5"
           />
