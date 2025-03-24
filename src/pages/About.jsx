@@ -18,11 +18,13 @@ const About = () => {
       <NavBar />
       <div className="flex flex-col p-8 flex-grow items-center text-center w-full">
         <div className="flex flex-col items-center">
-          <div className="text-xl font-bold text-white pt-5">
-            Réalisateur, vidéaste, cadreur/monteur et fondateur de Mehomies
-          </div>
+          
           <div className="text-6xl text-white pb-5">
             Salut ! Moi, c'est Mikha.
+          </div>
+          
+          <div className="text-xl font-bold text-white pt-5">
+            Réalisateur, vidéaste, cadreur/monteur et fondateur de Mehomies
           </div>
           
           <div className="text-xl text-white pb-8">
