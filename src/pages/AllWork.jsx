@@ -6,7 +6,6 @@ import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 import { PopupWidget } from "react-calendly";
 
-
 // Liste complète des vidéos
 const videoLinks = [
   { id: "O0Ys-U2_FEE", category: ["Clip musicaux"], date: "2024\nCréation intégrale", description: "TEST" },

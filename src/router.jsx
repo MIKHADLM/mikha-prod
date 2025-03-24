@@ -3,7 +3,7 @@ import App from "./App";
 import Homepage from "./pages/Homepage";
 import AllWork from "./pages/AllWork";
 import About from "./pages/About";
-import Contact2 from "./pages/Contact2";
+import Contact from "./pages/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/contact/",
-        element: <Contact2 />,
+        element: <Contact />,
       },
     ],
   },
