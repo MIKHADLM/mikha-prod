@@ -18,13 +18,8 @@ const videoLinks = [
   { id: "gDHglCewJVY", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
   { id: "sluhYQHknao", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
   { id: "O-W1xYAm1_U", category: ["Vidéos YouTube", "Clip musicaux"], date: "2023\nCréation intégrale" },
-  
-
   { id: "ECOo4thLKDU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "UI7MMOgIXsU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
-  /*
-  { id: "2JNtt1O9MYU&t=35s", category: ["Vidéos YouTube"], date: "2023\nMontage" },
-  */
   { id: "86VfBropop8", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "_UY40shea04", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "OGMQz6qc7n4", category: ["Vidéos YouTube"], date: "2023\nMontage" },
@@ -56,6 +51,8 @@ const AllWork = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const [menuOpen, setMenuOpen] = useState(false);  // Ajout de l'état pour ouvrir/fermer le menu mobile
+
   const opts = {
     playerVars: {
       autoplay: 1,
@@ -77,7 +74,7 @@ const AllWork = () => {
   return (
     <div className="bg-black min-h-screen overflow-x-hidden pt-24 px-0">
       {/* Barre de navigation */}
-      <NavBar />
+      <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} /> {/* Passer les props */}
 
       {/* Boutons de filtrage */}
       <div className="flex flex-wrap justify-center space-x-4 mb-6">
@@ -140,8 +137,6 @@ const AllWork = () => {
         />
       </div>
     </div>
-
-    
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar"; // Importation de la NavBar
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,8 @@ const Contact = () => {
     telephone: "",
     message: "",
   });
+
+  const [menuOpen, setMenuOpen] = useState(false); // Ajout de menuOpen pour la NavBar
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,12 +30,23 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex flex-col p-0 text-white pt-24">
+    <div className="min-h-screen bg-black flex flex-col text-white">
+      {/* Vidéo d'arrière-plan - si tu souhaites l'ajouter */}
+      <video
+        className="absolute z-10 w-full h-full object-cover"
+        src="https://www.example.com/your-background-video.mp4" // Remplace par ton lien de vidéo si tu souhaites
+        loop
+        muted
+        playsInline
+        autoPlay
+        style={{ zIndex: -1 }}
+      />
 
       {/* Barre de navigation */}
-      <NavBar />
-      
-      <div className="w-full flex justify-center">
+      <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
+
+      {/* Contenu principal */}
+      <div className="w-full flex justify-center pt-32 md:pt-24">
         <div className="w-full md:w-1/2 text-left">
           <h1 className="text-8xl font-bold mb-6 leading-tight">
             Une question ? <br /> Un projet ?
