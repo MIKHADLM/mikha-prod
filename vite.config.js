@@ -13,9 +13,17 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    historyApiFallback: true, // Permet de rediriger les routes vers index.html
   },
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name].js`,
+        assetFileNames: `[name].[ext]`,
+      },
+    },
   },
 });
