@@ -4,7 +4,7 @@ import process_1 from "../assets/process_1.png";
 import process_2 from "../assets/process_2.png";
 import process_3 from "../assets/process_3.png";
 import process_4 from "../assets/process_4.png";
-import photo_mikha_2 from "../assets/Photo_Mikha_2.png"
+import photo_mikha_2 from "../assets/photo_Mikha_2.png"
 import { Import } from "lucide-react";
 
 
