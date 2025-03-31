@@ -77,17 +77,18 @@ const AllWork = () => {
       <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} /> {/* Passer les props */}
 
       {/* Boutons de filtrage */}
-      <div className="flex flex-wrap justify-center space-x-4 mb-6">
-        {categories.map(category => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-lg text-white ${selectedCategory === category ? "bg-blue-500" : "bg-gray-700 hover:bg-gray-600"} transition duration-300`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+{/* Boutons de filtrage */}
+<div className="flex flex-wrap justify-center gap-4 mb-6">
+  {categories.map((category, index) => (
+    <button
+      key={category}
+      onClick={() => setSelectedCategory(category)}
+      className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 duration-300 shadow-lg w-32"
+    >
+      {category}
+    </button>
+  ))}
+</div>
 
       <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
         <Grid container spacing={1} style={{ margin: 0, width: "100%" }}>

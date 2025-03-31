@@ -52,6 +52,17 @@ const NavBar = ({ setMenuOpen, menuOpen }) => {
           >
             PORTFOLIO
           </Link>
+
+          {/* Nouveau lien vers SERVICES */}
+          <Link
+            to="/services/"
+            className={`text-lg text-white ${
+              location.pathname === "/services/" ? "font-bold" : "hover:font-bold"
+            }`}
+          >
+            SERVICES
+          </Link>
+          
           <Link
             to="/about/"
             className={`text-lg text-white ${
@@ -60,6 +71,7 @@ const NavBar = ({ setMenuOpen, menuOpen }) => {
           >
             À PROPOS
           </Link>
+          
           <Link
             to="/Contact/"
             className={`text-lg text-white ${
@@ -93,6 +105,16 @@ const NavBar = ({ setMenuOpen, menuOpen }) => {
           >
             PORTFOLIO
           </Link>
+
+          {/* Nouveau lien vers SERVICES */}
+          <Link
+            to="/services/"
+            className="text-lg hover:font-bold"
+            onClick={() => setMenuOpen(false)}
+          >
+            SERVICES
+          </Link>
+
           <Link
             to="/about/"
             className="text-lg hover:font-bold"
@@ -100,6 +122,7 @@ const NavBar = ({ setMenuOpen, menuOpen }) => {
           >
             À PROPOS
           </Link>
+          
           <Link
             to="/Contact/"
             className="text-lg hover:font-bold"

@@ -48,7 +48,7 @@ const Contact = () => {
       {/* Contenu principal */}
       <div className="w-full flex justify-center pt-32 md:pt-24">
         <div className="w-full md:w-1/2 text-left">
-          <h1 className="text-8xl font-bold mb-6 leading-tight">
+          <h1 className="text-6xl font-bold mb-6 leading-tight">
             Une question ? <br /> Un projet ?
           </h1>
         </div>
