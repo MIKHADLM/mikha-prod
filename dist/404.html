@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=/mikha-prod/" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        (function() {
+            var path = window.location.pathname;
+            var newUrl = "/" + path.replace(/^\/|\/$/g, "");
+            window.location.replace(newUrl);
+        })();
+    </script>
 </head>
 <body>
+    <h1>Redirecting...</h1>
 </body>
 </html>
