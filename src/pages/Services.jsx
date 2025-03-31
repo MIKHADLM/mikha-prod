@@ -243,9 +243,5 @@ const Services = () => {
   );
 };
 
-<<<<<<< HEAD
-export default Services;
-=======
 
 export default Services;
->>>>>>> d745b55 (Ajout services 2)
