@@ -2,31 +2,25 @@ import React, { useState } from "react";
 import NavBar from "../components/NavBar"; // Importation de la NavBar
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    demande: "",
-    nom: "",
-    prenom: "",
-    entreprise: "",
-    email: "",
-    telephone: "",
-    message: "",
-  });
-
   const [menuOpen, setMenuOpen] = useState(false); // Ajout de menuOpen pour la NavBar
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Données du formulaire envoyées :", formData);
-    alert("Votre message a été envoyé !");
-  };
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
 
-  // Fonction pour ouvrir le pop-up Calendly
-  const openCalendlyPopup = () => {
-    window.Calendly.initPopupWidget({ url: "https://calendly.com/mikha-vizion/30min" });
+    const result = await response.json();
+
+    if (result.success) {
+      alert("Votre message a été envoyé avec succès !");
+      event.target.reset();
+    } else {
+      alert("Une erreur est survenue, veuillez réessayer.");
+    }
   };
 
   return (
@@ -78,87 +72,62 @@ const Contact = () => {
         </div>
 
         {/* Colonne droite - Formulaire */}
-        <div className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
-          <form onSubmit={handleSubmit}>
-            <select
-              name="demande"
-              value={formData.demande}
-              onChange={handleChange}
-              required
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            >
-              <option value="">Votre demande concerne *</option>
-              <option value="Projet vidéo">Un projet vidéo</option>
-              <option value="Collaboration">Demande de collaboration</option>
-              <option value="Autre">Autre</option>
-            </select>
+        <form onSubmit={handleSubmit} className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+          <input type="hidden" name="access_key" value="8fce030a-f3d4-4f56-8b75-ba9023d77ec8" />
 
-            <input
-              type="text"
-              name="nom"
-              value={formData.nom}
-              onChange={handleChange}
-              required
-              placeholder="Nom*"
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            />
+          <input
+            type="text"
+            name="nom"
+            required
+            placeholder="Nom*"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          />
 
-            <input
-              type="text"
-              name="prenom"
-              value={formData.prenom}
-              onChange={handleChange}
-              required
-              placeholder="Prénom*"
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            />
+          <input
+            type="text"
+            name="prenom"
+            required
+            placeholder="Prénom*"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          />
 
-            <input
-              type="text"
-              name="entreprise"
-              value={formData.entreprise}
-              onChange={handleChange}
-              placeholder="Entreprise"
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            />
+          <input
+            type="text"
+            name="entreprise"
+            placeholder="Entreprise"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          />
 
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Email*"
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            />
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Email*"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          />
 
-            <input
-              type="tel"
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleChange}
-              placeholder="Téléphone"
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            />
+          <input
+            type="tel"
+            name="telephone"
+            placeholder="Téléphone"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          />
 
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows="4"
-              placeholder="Dites-moi en plus sur votre projet*"
-              required
-              className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
-            ></textarea>
+          <textarea
+            name="message"
+            rows="4"
+            required
+            placeholder="Dites-moi en plus sur votre projet*"
+            className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"
+          ></textarea>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded"
-            >
-              Envoyer
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded"
+          >
+            Envoyer
+          </button>
+        </form>
       </div>
     </div>
   );
