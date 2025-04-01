@@ -1,5 +1,6 @@
 import React from "react";
 import NavBar from "../components/NavBar"; // Importation de la NavBar
+import { PopupWidget } from "react-calendly";
 
 export default function Contact() {
   const [result, setResult] = React.useState("");
@@ -59,6 +60,17 @@ export default function Contact() {
             Envoyer
           </button>
         </form>
+
+        {/* Ajout du bouton Calendly avec un positionnement absolu */}
+        <div className="absolute top-0 right-0 mt-12 mr-12 z-50">
+          <PopupWidget
+            url="https://calendly.com/mikha-vizion/30min"
+            rootElement={document.getElementById("root")}
+            text="Réserver un appel !"
+            textColor="#ffffff"
+            color="#4f46e5"
+          />
+        </div>
 
         <span className="text-white mt-4">{result}</span>
       </div>
