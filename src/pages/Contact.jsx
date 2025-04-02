@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar"; // Importation de la NavBar
 import { PopupWidget } from "react-calendly";
 
 export default function Contact() {
-  const [result, setResult] = React.useState("");
+  const [result, setResult] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false); // Ajout de l'état du menu burger
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -30,7 +31,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col text-white">
-      <NavBar />
+      <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
 
       <div className="w-full flex justify-center pt-32 md:pt-24">
         <div className="w-full md:w-1/2 text-left">
