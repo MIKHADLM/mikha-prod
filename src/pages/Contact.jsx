@@ -33,47 +33,50 @@ export default function Contact() {
     <div className="min-h-screen bg-black flex flex-col text-white">
       <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
 
-      <div className="w-full flex justify-center pt-32 md:pt-24">
-        <div className="w-full md:w-1/2 text-left">
-          <h1 className="text-6xl font-bold mb-6 leading-tight">
-            Une question ? <br /> Un projet ?
-          </h1>
-        </div>
-      </div>
-
-      <div className="flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl mx-auto mt-12">
-        <div className="w-full md:w-1/2 text-left">
-          <h1 className="text-5xl font-bold mb-6 leading-tight">
-            Mikha est prêt à vous répondre !
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Vous avez une idée, une collaboration en tête ou vous souhaitez en savoir plus sur mes services ?
-            <br />
-            Remplissez le formulaire ou prenez directement un rendez-vous pour un appel.
-          </p>
+      {/* Conteneur avec padding sur mobile */}
+      <div className="px-4 sm:px-8">
+        <div className="w-full flex justify-center pt-32 md:pt-24">
+          <div className="w-full md:w-1/2 text-left">
+            <h1 className="text-6xl font-bold mb-6 leading-tight">
+              Une question ? <br /> Un projet ?
+            </h1>
+          </div>
         </div>
 
-        <form onSubmit={onSubmit} className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
-          <input type="text" name="name" required placeholder="Nom*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"/>
-          <input type="email" name="email" required placeholder="Email*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"/>
-          <textarea name="message" required placeholder="Message*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"></textarea>
-          <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded">
-            Envoyer
-          </button>
-        </form>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl mx-auto mt-12">
+          <div className="w-full md:w-1/2 text-left">
+            <h1 className="text-5xl font-bold mb-6 leading-tight">
+              Mikha est prêt à vous répondre !
+            </h1>
+            <p className="text-gray-400 text-lg">
+              Vous avez une idée, une collaboration en tête ou vous souhaitez en savoir plus sur mes services ?
+              <br />
+              Remplissez le formulaire ou prenez directement un rendez-vous pour un appel.
+            </p>
+          </div>
 
-        {/* Ajout du bouton Calendly avec un positionnement absolu */}
-        <div className="absolute top-0 right-0 mt-12 mr-12 z-50">
-          <PopupWidget
-            url="https://calendly.com/mikha-vizion/30min"
-            rootElement={document.getElementById("root")}
-            text="Réserver un appel !"
-            textColor="#ffffff"
-            color="#4f46e5"
-          />
+          <form onSubmit={onSubmit} className="w-full md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <input type="text" name="name" required placeholder="Nom*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"/>
+            <input type="email" name="email" required placeholder="Email*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"/>
+            <textarea name="message" required placeholder="Message*" className="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded"></textarea>
+            <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded">
+              Envoyer
+            </button>
+          </form>
+
+          {/* Ajout du bouton Calendly avec un positionnement absolu */}
+          <div className="absolute top-0 right-0 mt-12 mr-12 z-50">
+            <PopupWidget
+              url="https://calendly.com/mikha-vizion/30min"
+              rootElement={document.getElementById("root")}
+              text="Réserver un appel !"
+              textColor="#ffffff"
+              color="#4f46e5"
+            />
+          </div>
+
+          <span className="text-white mt-4">{result}</span>
         </div>
-
-        <span className="text-white mt-4">{result}</span>
       </div>
     </div>
   );
