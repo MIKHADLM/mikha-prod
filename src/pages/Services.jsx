@@ -6,6 +6,7 @@ import process_3 from "../assets/process_3.png";
 import process_4 from "../assets/process_4.png";
 import photo_mikha_2 from "../assets/photo_mikha_2.png"
 import vid_site from "../assets/vid_site.mp4"
+import minia_vid_site from "../assets/minia_vid_site.jpg"
 import { Import } from "lucide-react";
 
 
@@ -107,7 +108,7 @@ const Services = () => {
 
             {
             <div className="flex justify-center items-center">
-              <video className="w-full h-auto" controls loop playsInline poster="/minia_vid_site.jpg">
+              <video className="w-full h-auto" controls loop playsInline poster="../assets/minia_vid_site.jpg">
                 <source src={vid_site} type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
