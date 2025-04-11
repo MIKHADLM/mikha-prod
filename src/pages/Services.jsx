@@ -5,12 +5,13 @@ import process_2 from "../assets/process_2.png";
 import process_3 from "../assets/process_3.png";
 import process_4 from "../assets/process_4.png";
 import photo_mikha_2 from "../assets/photo_mikha_2.png"
+import vid_site from "../assets/vid_site.mp4"
 import { Import } from "lucide-react";
 
 
 const services = [
   {
-    title: "PACK Réseaux",
+    title: "PACK Montage Réseaux",
     description: "Soignez la qualité de vos vidéos pour booster votre visibilité.",
     points: [
       "3 à 5 vidéos courtes pour vos réseaux",
@@ -22,17 +23,30 @@ const services = [
     image: "/path-to-your-image-1.png",
   },
   {
-    title: "PACK Réseaux PRO",
+    title: "PACK Storytelling/Montage Réseaux",
     description: "Accompagnement sur la durée pour maximiser votre impact.",
     points: [
-      "8 à 10 vidéos courtes par mois",
+      "À partir de 5 vidéos par mois",
+      "Optimisation du storytelling",
       "Suivi et amélioration continu",
       "Analyse des performances",
+      "Montage personalisé",
       "Livraison continue",
     ],
-    price: "À partir de 840 €",
+    price: "À partir de 475 €",
     image: "/path-to-your-image-2.png",
   },
+  {
+    title: "PACK AfterMovie",
+    description: "Idéale pour les AfterMovies (Événementiel, Soirée..) ",
+    points: [
+      "Une demi-journée de tournage",
+      "Rendu d'une vidéo courte montée de qualité",
+    ],
+    price: "À partir de 550 €",
+    image: "/path-to-your-image-2.png",
+  },
+
 ];
 
 // Fonction pour ouvrir le pop-up Calendly
@@ -91,21 +105,22 @@ const Services = () => {
               </button>
             </div>
 
-            {/*
+            {
             <div className="flex justify-center items-center">
-              <video className="w-full h-auto" controls>
-                <source src="" type="video/mp4" />
+              <video className="w-full h-auto" controls loop>
+                <source src={vid_site} type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
             </div>
-            */}
+            }
+
 
             {/* Image temporaire en attendant la vidéo */}
-
+            {/*
             <div className="flex justify-center items-center">
               <img src={photo_mikha_2} alt="Image temporaire" className="w-full h-auto rounded-lg" />
             </div>
-
+            */}
           </div>
           
           
