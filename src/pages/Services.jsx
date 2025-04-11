@@ -107,7 +107,7 @@ const Services = () => {
 
             {
             <div className="flex justify-center items-center">
-              <video className="w-full h-auto" controls loop>
+              <video className="w-full h-auto" controls loop playsInline poster="/minia_vid_site.jpg">
                 <source src={vid_site} type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
