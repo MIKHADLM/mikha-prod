@@ -40,7 +40,7 @@ const styles = {
   logo: {
     fontSize: "2rem",
     fontWeight: "bold",
-    color: "#f5e1a4",
+    color: "#60a5fa",
   },
   nav: {
     display: "flex",
@@ -54,7 +54,7 @@ const styles = {
     fontWeight: "bold",
   },
   bottomSection: {
-    borderTop: "1px solid #f5e1a4",
+    borderTop: "1px solid #60a5fa",
     paddingTop: "10px",
     display: "flex",
     justifyContent: "space-between",
@@ -68,7 +68,7 @@ const styles = {
     color: "#aaa",
   },
   highlight: {
-    color: "#f5e1a4",
+    color: "#60a5fa",
     fontWeight: "bold",
   },
   legalNav: {
@@ -76,7 +76,7 @@ const styles = {
     gap: "15px",
   },
   legalLink: {
-    color: "#f5e1a4",
+    color: "#60a5fa",
     textDecoration: "none",
     fontWeight: "bold",
   },
