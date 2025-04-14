@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer"; // Ajout du Footer
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
@@ -121,6 +122,7 @@ const About = () => {
               entrepreneurs dans leur communication.
             </p>
           </div>
+
           {/* Widget Calendly */}
           <div className="flex justify-center mt-6">
             <PopupWidget
@@ -132,7 +134,6 @@ const About = () => {
             />
           </div>
         </div>
-
         {/* Diplômes en dessous */}
         <div className="lg:w-1/2 mt-8">
           <div className="text-xl text-white pb-1 font-semibold text-left">
@@ -151,7 +152,10 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+      <div className="w-full">
+        <Footer />
+      </div>
+      </div>
   );
 };
 

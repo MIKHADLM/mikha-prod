@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar"; // Importation de la NavBar
+import Footer from "../components/Footer";
 import { PopupWidget } from "react-calendly";
 
 export default function Contact() {
@@ -78,6 +79,8 @@ export default function Contact() {
           <span className="text-white mt-4">{result}</span>
         </div>
       </div>
+      <div className="mb-32" />
+      <Footer />
     </div>
   );
 }

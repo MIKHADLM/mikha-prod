@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
@@ -158,9 +159,13 @@ const AllWork = () => {
           textColor="#ffffff"
           color="#4f46e5"
         />
+        
       </div>
+      <Footer />
     </div>
+    
   );
+  
 };
 
 export default AllWork;
