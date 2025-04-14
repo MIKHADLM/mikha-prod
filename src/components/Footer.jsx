@@ -24,7 +24,7 @@ const Footer = () => {
       </div>
 
       <div style={styles.bottomSection}>
-        <p style={styles.copyright}>© MIKHA - 2024</p>
+        <p style={styles.copyright}>© MIKHA - 2025</p>
         <p style={styles.builtBy}>Site co-construit par <span style={styles.highlight}>Liam Le Strat et Michael Philibert</span></p>
         <nav style={styles.legalNav}>
           <Link to="/legal" style={styles.legalLink}>Mentions légales</Link>

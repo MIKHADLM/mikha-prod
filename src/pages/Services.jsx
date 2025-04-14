@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react"; // Importation de useRef
 import NavBar from "../components/NavBar"; // Importation de la NavBar
+import Footer from "../components/Footer";
 import process_1 from "../assets/process_1.png";
 import process_2 from "../assets/process_2.png";
 import process_3 from "../assets/process_3.png";
@@ -239,6 +240,7 @@ const Services = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

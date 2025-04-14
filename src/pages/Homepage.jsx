@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar"; // Importation de la NavBar
+import Footer from "../components/Footer";
 import video from "../assets/background-homepage.mp4";
 import { PopupWidget } from "react-calendly";
 
@@ -38,6 +39,8 @@ const Homepage = () => {
           color="#4f46e5"
         />
       </div>
+      
+
     </div>
   );
 };
