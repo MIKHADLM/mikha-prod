@@ -13,6 +13,19 @@ import { Import } from "lucide-react";
 
 const services = [
   {
+    title: "Pack Com’ Locale",
+    description: "Un accompagnement créatif pour booster votre présence en ligne.",
+    points: [
+      "4 vidéos courtes / mois (format Instagram, TikTok...)",
+      "Prise de photos en option",
+      "Captation et montage de qualité",
+      "Accompagnement stratégique pour une mise en avant créative",
+      "Personnalisation du pack possible selon vos besoins",
+    ],
+    price: "À partir de 600 €",
+    image: "/path-to-your-image-1.png",
+  },
+  {
     title: "PACK Montage Réseaux",
     description: "Soignez la qualité de vos vidéos pour booster votre visibilité.",
     points: [
