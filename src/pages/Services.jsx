@@ -8,13 +8,21 @@ import process_4 from "../assets/process_4.png";
 import photo_mikha_2 from "../assets/photo_mikha_2.png"
 import vid_site from "../assets/vid_site.mp4"
 import minia_vid_site from "../assets/minia_vid_site.jpg"
-import { Import } from "lucide-react";
+import { AlignJustify, Import } from "lucide-react";
 
 
 const services = [
   {
     title: "Pack Com’ Locale",
-    description: "Un accompagnement créatif pour booster votre présence en ligne.",
+    description: (
+      <>
+        <strong>Un accompagnement créatif pour booster votre présence en ligne.</strong>
+        <br />
+        <p style={{ textAlign: "justify" }}>
+          Chaque mois, du contenu pensé pour mettre en valeur votre établissement. Des formats courts, prêts pour vos réseaux — le tout avec un regard stratégique et une qualité pro.
+        </p>
+      </>
+    ),
     points: [
       "4 vidéos courtes / mois (format Instagram, TikTok...)",
       "Prise de photos en option",
