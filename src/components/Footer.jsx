@@ -17,8 +17,12 @@ const Footer = () => {
             <Link to="/contact" style={styles.link}>Contact</Link>
           </nav>
           <div style={styles.socialLinks}>
-            <a href="https://www.instagram.com/mikha_dlm/" target="_blank" rel="noopener noreferrer" style={styles.socialIcon}>Instagram</a>
-            <a href="https://www.youtube.com/@mikha_dlm" target="_blank" rel="noopener noreferrer" style={styles.socialIcon}>YouTube</a>
+            <a href="https://www.instagram.com/mikha_dlm/" target="_blank" rel="noopener noreferrer" style={styles.socialIcon}>
+              <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram" style={styles.iconImage} />
+            </a>
+            <a href="https://www.youtube.com/@mikha_dlm" target="_blank" rel="noopener noreferrer" style={styles.socialIcon}>
+              <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/youtube.svg" alt="YouTube" style={styles.iconImage} />
+            </a>
           </div>
         </div>
       </div>
@@ -110,6 +114,11 @@ const styles = {
     color: "#60a5fa",
     textDecoration: "none",
     fontWeight: "bold",
+  },
+  iconImage: {
+    width: "24px",
+    height: "24px",
+    filter: "brightness(0) invert(1)",
   },
 };
 
