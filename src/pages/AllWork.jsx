@@ -9,19 +9,19 @@ import { PopupWidget } from "react-calendly";
 
 // Liste complète des vidéos
 const videoLinks = [
-  
-  { id: "O0Ys-U2_FEE", category: ["Clip musicaux"], date: "2024\nCréation intégrale", description: "TEST" },
-  { id: "KDkNl5MbF_k", category: ["Publicité"], date: "2024\nMontage - Colorimétrie", description: "TEST" },
+  { id: "dZvV-Izb4lw", category: ["Vidéos YouTube"], date: "2025\nMontage", description: "" },
+  { id: "TbnVavXY8dg&t=2s", category: ["Vidéos YouTube"], date: "2025\nMontage", description: "" },
+  { id: "BeR1bWRlPSc&t=2s", category: ["Vidéos YouTube"], date: "2025\nMontage", description: "" },
+  { id: "O0Ys-U2_FEE", category: ["Clip musicaux"], date: "2024\nCréation intégrale", description: "" },
+  { id: "KDkNl5MbF_k", category: ["Publicité"], date: "2024\nMontage - Colorimétrie", description: "" },
   { id: "dFraOpFdEy0", category: ["Publicité"], date: "2024\nMontage - Colorimétrie" },
   { id: "rpgbOMxSljk", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
   { id: "86rCW1UEFKA", category: ["Vidéos YouTube"], date: "2024\nRéalisation - Montage" },
   { id: "EOI3If7TVyQ", category: ["Vidéos YouTube"], date: "2024\nInterview - Motion Design - Montage" },
   { id: "ZVE95wJM9is", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
   { id: "gDHglCewJVY", category: ["Vidéos YouTube"], date: "2024\nCréation intégrale" },
-
   { id: "sluhYQHknao", category: ["Clip musicaux"], date: "2023\nCréation intégrale" },
   { id: "O-W1xYAm1_U", category: ["Vidéos YouTube", "Clip musicaux"], date: "2023\nCréation intégrale" },
-
   { id: "ECOo4thLKDU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "UI7MMOgIXsU", category: ["Vidéos YouTube"], date: "2023\nMontage" },
   { id: "86VfBropop8", category: ["Vidéos YouTube"], date: "2023\nMontage" },
