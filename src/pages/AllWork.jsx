@@ -80,6 +80,7 @@ const AllWork = () => {
   const [open, setOpen] = useState(false);
 
   const [menuOpen, setMenuOpen] = useState(false);  // Ajout de l'état pour ouvrir/fermer le menu mobile
+  const [hoveredVideo, setHoveredVideo] = useState(null);
 
   const opts = {
     playerVars: {
@@ -120,31 +121,74 @@ const AllWork = () => {
 
       <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
         <Grid container spacing={1} style={{ margin: 0, width: "100%" }}>
-          {filteredVideos.map((video, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-              <div
-                className="relative group"
-                style={{ cursor: "pointer" }}
-                onClick={() => handleThumbnailClick(video.id)} // Gère le clic
-              >
-                {/* Miniature de la vidéo */}
-                <img
-                  src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                  alt={`Miniature de la vidéo ${video.date.replace("\n", " - ")}`}
-                  className="w-full h-auto block object-cover group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
-                />
-                {/* Texte associé à la miniature */}
-                <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity font-semibold">
-                  {video.date.split("\n").map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                </span>
-              </div>
-            </Grid>
-          ))}
+          {filteredVideos.map((video, index) => {
+            const isShort = video.category.includes("Vidéos courtes");
+
+            return (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <div
+                  className="relative group"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleThumbnailClick(video.id)} // Gère le clic
+                  onMouseEnter={() => setHoveredVideo(video.id)}
+                  onMouseLeave={() => setHoveredVideo(null)}
+                >
+                  {/* Wrapper pour gérer le ratio de la miniature */}
+                  <div
+                    className={`w-full overflow-hidden rounded-md bg-black ${
+                      isShort ? "aspect-[9/16]" : "aspect-video"
+                    }`}
+                  >
+                    {hoveredVideo === video.id ? (
+                      <YouTube
+                        videoId={video.id}
+                        opts={{
+                          width: "100%",
+                          height: "100%",
+                          playerVars: {
+                            autoplay: 1,
+                            controls: 0,
+                            mute: 1,
+                            rel: 0,
+                            modestbranding: 1,
+                          },
+                        }}
+                        className="w-full h-full"
+                        onReady={(event) => {
+                          if (event?.target?.mute) {
+                            event.target.mute();
+                          }
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                        alt={`Miniature de la vidéo ${video.date.replace("\n", " - ")}`}
+                        className="w-full h-full object-cover block group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
+                      />
+                    )}
+                  </div>
+
+                  {/* Badge pour distinguer les vidéos courtes */}
+                  {isShort && (
+                    <span className="absolute top-2 left-2 bg-red-600 text-xs font-semibold text-white px-2 py-1 rounded-full shadow-md">
+                      Vidéos courtes
+                    </span>
+                  )}
+
+                  {/* Texte associé à la miniature */}
+                  <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity font-semibold">
+                    {video.date.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </span>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
 
