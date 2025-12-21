@@ -129,9 +129,12 @@ const AllWork = () => {
                 <div
                   className="relative group"
                   style={{ cursor: "pointer" }}
-                  onClick={() => handleThumbnailClick(video.id)} // Gère le clic
+                  onClick={() => handleThumbnailClick(video.id)} // Gère le clic (desktop + mobile)
                   onMouseEnter={() => setHoveredVideo(video.id)}
                   onMouseLeave={() => setHoveredVideo(null)}
+                  onTouchStart={() => setHoveredVideo(video.id)}
+                  onTouchEnd={() => setHoveredVideo(null)}
+                  onTouchCancel={() => setHoveredVideo(null)}
                 >
                   {/* Wrapper pour gérer le ratio de la miniature */}
                   <div
@@ -153,7 +156,7 @@ const AllWork = () => {
                             modestbranding: 1,
                           },
                         }}
-                        className="w-full h-full"
+                        className="w-full h-full pointer-events-none"
                         onReady={(event) => {
                           if (event?.target?.mute) {
                             event.target.mute();
