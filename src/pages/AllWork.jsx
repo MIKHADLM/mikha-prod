@@ -211,7 +211,7 @@ const AllWork = () => {
                   key={index}
                   className={`relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${
                     isVertical 
-                      ? "aspect-[9/16]" // Verticale : ratio 9:16
+                      ? "aspect-[4/5] md:aspect-[9/16]" // Verticale : 4:5 mobile, 9:16 desktop
                       : video.pattern === "duo" 
                         ? "aspect-video" // Duo : ratio 16:9 standard pour alignement
                         : "aspect-video md:aspect-auto h-full min-h-[300px]" // Hero : ratio flexible avec hauteur minimale
