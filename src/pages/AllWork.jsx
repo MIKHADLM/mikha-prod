@@ -147,36 +147,45 @@ const AllWork = () => {
         </div>
 
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 w-full">
-            {filteredVideos.map((video, index) => {
-              const isVertical = video.orientation === "vertical";
-              const isShort =
-                isVertical || video.category?.includes("Vidéos courtes");
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
+            {/* Logique Gemini : alternance H+V, grille 4 colonnes */}
+            {(() => {
+              const filtered = selectedCategory === "Toutes les vidéos"
+                ? filteredVideos
+                : filteredVideos.filter(v => v.category?.includes(selectedCategory));
+
+              if (selectedCategory !== "Toutes les vidéos") return filtered;
+
+              const horizontals = filtered.filter(v => !v.orientation || v.orientation !== "vertical");
+              const verticals = filtered.filter(v => v.orientation === "vertical" || v.category?.includes("Vidéos courtes"));
+
+              const result = [];
+              const max = Math.max(horizontals.length, verticals.length);
+
+              for (let i = 0; i < max; i++) {
+                if (horizontals[i]) result.push(horizontals[i]);
+                if (verticals[i]) result.push(verticals[i]);
+              }
+              return result;
+            })().map((video, index) => {
+              const isVertical = video.orientation === "vertical" || video.category?.includes("Vidéos courtes");
+              const isShort = isVertical;
 
               const thumbnailSrc =
                 video.thumbnailUrl && video.thumbnailUrl.trim().length > 0
                   ? video.thumbnailUrl
                   : `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
 
-              const spanCols = video.spanCols || 1;
-              const spanRows = video.spanRows || 1;
-
-              // Calcul de la classe d'aspect-ratio pour le CONTENEUR
-              let aspectRatioClass = "aspect-video"; // Défaut (16:9) pour 1x1 et 2x2
-              
-              if (isVertical) {
-                // Si c'est une verticale qui s'étend sur 2 lignes, le conteneur doit être en 8:9
-                // pour s'aligner parfaitement avec deux blocs 16:9 superposés.
-                aspectRatioClass = "aspect-[8/9]";
-              }
-
               return (
                 <div
                   key={index}
-                  className={`relative group w-full ${aspectRatioClass} bg-black overflow-hidden`}
+                  className={`relative group w-full bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${
+                    isVertical 
+                      ? "col-span-1 aspect-[9/16]" // Verticale : Ratio 9:16 forcé (maître hauteur)
+                      : "col-span-1 md:col-span-3 h-full" // Horizontale : 3/4 largeur, s'adapte à la hauteur
+                  }`}
                   style={{
-                    gridColumn: `span ${spanCols}`,
-                    gridRow: `span ${spanRows}`,
+                    // Pas de gridColumn/gridRow fixes, gérés par les classes Tailwind
                   }}
                   onClick={() => handleThumbnailClick(video.id)} // Gère le clic (desktop + mobile)
                   onMouseEnter={() => setHoveredVideo(video.id)}
@@ -186,46 +195,33 @@ const AllWork = () => {
                   onTouchCancel={() => setHoveredVideo(null)}
                 >
                   
-                  {/* LOGIQUE INTERNE : GESTION DU CONTENU */}
-                  <div className="w-full h-full flex items-center justify-center">
-                    
-                    {/* Si c'est vertical, on veut un vrai 9:16 centré.
-                       Sinon (horizontal), on remplit tout (object-cover).
-                    */}
-                    <div className={`relative ${isVertical ? 'h-full aspect-[9/16]' : 'w-full h-full'}`}>
-                      
-                      {hoveredVideo === video.id ? (
-                        <div className="w-full h-full overflow-hidden">
-                           <YouTube
-                            videoId={video.id}
-                            opts={{
-                              height: '100%',
-                              width: '100%', 
-                              playerVars: {
-                                autoplay: 1,
-                                controls: 0,
-                                mute: 1,
-                                rel: 0,
-                                modestbranding: 1,
-                                playsinline: 1,
-                                loop: 1,
-                                playlist: video.id // Nécessaire pour le loop
-                              },
-                            }}
-                            className="w-full h-full pointer-events-none"
-                            onReady={(e) => e.target.mute()}
-                          />
-                        </div>
-                      ) : (
-                        <img
-                          src={thumbnailSrc}
-                          alt={video.title || ""}
-                          className="w-full h-full object-cover block"
-                        />
-                      )}
-                    </div>
-
-                  </div>
+                  {hoveredVideo === video.id ? (
+                    <YouTube
+                      videoId={video.id}
+                      opts={{
+                        height: '100%',
+                        width: '100%', 
+                        playerVars: {
+                          autoplay: 1,
+                          controls: 0,
+                          mute: 1,
+                          rel: 0,
+                          modestbranding: 1,
+                          playsinline: 1,
+                          loop: 1,
+                          playlist: video.id // Nécessaire pour le loop
+                        },
+                      }}
+                      className="w-full h-full pointer-events-none"
+                      onReady={(e) => e.target.mute()}
+                    />
+                  ) : (
+                    <img
+                      src={thumbnailSrc}
+                      alt={video.title || ""}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
 
                   {/* Badge */}
                   {isShort && (
