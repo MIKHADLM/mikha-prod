@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Box from "@mui/system/Box";
-import Grid from "@mui/system/Unstable_Grid";
 import YouTube from "react-youtube";
 import Modal from "@mui/material/Modal";
 import { PopupWidget } from "react-calendly";
+import { getVideos } from "../services/videosService";
 
 // Liste complète des vidéos
 const videoLinks = [
@@ -81,6 +81,23 @@ const AllWork = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);  // Ajout de l'état pour ouvrir/fermer le menu mobile
   const [hoveredVideo, setHoveredVideo] = useState(null);
+  const [remoteVideos, setRemoteVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const data = await getVideos();
+        console.log("VIDEOS FIRESTORE", data);
+        if (Array.isArray(data) && data.length > 0) {
+          setRemoteVideos(data);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des vidéos depuis Firestore", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
 
   const opts = {
     playerVars: {
@@ -89,10 +106,17 @@ const AllWork = () => {
     },
   };
 
+  // On utilise en priorité les vidéos venant de Firestore si elles existent,
+  // sinon on retombe sur la liste locale codée en dur.
+  const allVideosRaw = remoteVideos.length > 0 ? remoteVideos : videoLinks;
+
+  // Filtrer les vidéos non visibles (visible === false)
+  const allVideos = allVideosRaw.filter((video) => video.visible !== false);
+
   // Fonction pour filtrer les vidéos selon la catégorie
   const filteredVideos = selectedCategory === "Toutes les vidéos"
-    ? videoLinks
-    : videoLinks.filter(video => video.category.includes(selectedCategory)); // Utilisation de includes()
+    ? allVideos
+    : allVideos.filter(video => video.category?.includes(selectedCategory));
 
   // Fonction pour gérer la sélection d'une vidéo
   const handleThumbnailClick = (videoId) => {
@@ -101,34 +125,59 @@ const AllWork = () => {
   };
 
   return (
+
     <div className="bg-black min-h-screen overflow-x-hidden pt-24 px-0">
       {/* Barre de navigation */}
       <NavBar setMenuOpen={setMenuOpen} menuOpen={menuOpen} /> {/* Passer les props */}
 
-      {/* Boutons de filtrage */}
-{/* Boutons de filtrage */}
-<div className="flex flex-wrap justify-center gap-4 mb-6">
-  {categories.map((category, index) => (
-    <button
-      key={category}
-      onClick={() => setSelectedCategory(category)}
-      className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 duration-300 shadow-lg w-32"
-    >
-      {category}
-    </button>
-  ))}
-</div>
+      {/* Contenu avec marges latérales */}
+      <div className="px-4 md:px-8 lg:px-16">
 
-      <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-        <Grid container spacing={1} style={{ margin: 0, width: "100%" }}>
-          {filteredVideos.map((video, index) => {
-            const isShort = video.category.includes("Vidéos courtes");
+        {/* Boutons de filtrage */}
+        <div className="flex flex-wrap justify-center gap-4 mb-6 px-4">
+          {categories.map((category, index) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 duration-300 shadow-lg w-32"
+            >
+              {category}
+            </button>
+          ))}
+        </div>
 
-            return (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+        <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 w-full">
+            {filteredVideos.map((video, index) => {
+              const isVertical = video.orientation === "vertical";
+              const isShort =
+                isVertical || video.category?.includes("Vidéos courtes");
+
+              const thumbnailSrc =
+                video.thumbnailUrl && video.thumbnailUrl.trim().length > 0
+                  ? video.thumbnailUrl
+                  : `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
+
+              const spanCols = video.spanCols || 1;
+              const spanRows = video.spanRows || 1;
+
+              // Calcul de la classe d'aspect-ratio pour le CONTENEUR
+              let aspectRatioClass = "aspect-video"; // Défaut (16:9) pour 1x1 et 2x2
+              
+              if (isVertical) {
+                // Si c'est une verticale qui s'étend sur 2 lignes, le conteneur doit être en 8:9
+                // pour s'aligner parfaitement avec deux blocs 16:9 superposés.
+                aspectRatioClass = "aspect-[8/9]";
+              }
+
+              return (
                 <div
-                  className="relative group"
-                  style={{ cursor: "pointer" }}
+                  key={index}
+                  className={`relative group w-full ${aspectRatioClass} bg-black overflow-hidden`}
+                  style={{
+                    gridColumn: `span ${spanCols}`,
+                    gridRow: `span ${spanRows}`,
+                  }}
                   onClick={() => handleThumbnailClick(video.id)} // Gère le clic (desktop + mobile)
                   onMouseEnter={() => setHoveredVideo(video.id)}
                   onMouseLeave={() => setHoveredVideo(null)}
@@ -136,88 +185,102 @@ const AllWork = () => {
                   onTouchEnd={() => setHoveredVideo(null)}
                   onTouchCancel={() => setHoveredVideo(null)}
                 >
-                  {/* Wrapper pour gérer le ratio de la miniature */}
-                  <div
-                    className={`w-full overflow-hidden rounded-md bg-black ${
-                      isShort ? "aspect-[9/16]" : "aspect-video"
-                    }`}
-                  >
-                    {hoveredVideo === video.id ? (
-                      <YouTube
-                        videoId={video.id}
-                        opts={{
-                          width: "100%",
-                          height: "100%",
-                          playerVars: {
-                            autoplay: 1,
-                            controls: 0,
-                            mute: 1,
-                            rel: 0,
-                            modestbranding: 1,
-                          },
-                        }}
-                        className="w-full h-full pointer-events-none"
-                        onReady={(event) => {
-                          if (event?.target?.mute) {
-                            event.target.mute();
-                          }
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                        alt={`Miniature de la vidéo ${video.date.replace("\n", " - ")}`}
-                        className="w-full h-full object-cover block group-hover:opacity-25 group-focus:opacity-25 transition-opacity duration-300"
-                      />
-                    )}
+                  
+                  {/* LOGIQUE INTERNE : GESTION DU CONTENU */}
+                  <div className="w-full h-full flex items-center justify-center">
+                    
+                    {/* Si c'est vertical, on veut un vrai 9:16 centré.
+                       Sinon (horizontal), on remplit tout (object-cover).
+                    */}
+                    <div className={`relative ${isVertical ? 'h-full aspect-[9/16]' : 'w-full h-full'}`}>
+                      
+                      {hoveredVideo === video.id ? (
+                        <div className="w-full h-full overflow-hidden">
+                           <YouTube
+                            videoId={video.id}
+                            opts={{
+                              height: '100%',
+                              width: '100%', 
+                              playerVars: {
+                                autoplay: 1,
+                                controls: 0,
+                                mute: 1,
+                                rel: 0,
+                                modestbranding: 1,
+                                playsinline: 1,
+                                loop: 1,
+                                playlist: video.id // Nécessaire pour le loop
+                              },
+                            }}
+                            className="w-full h-full pointer-events-none"
+                            onReady={(e) => e.target.mute()}
+                          />
+                        </div>
+                      ) : (
+                        <img
+                          src={thumbnailSrc}
+                          alt={video.title || ""}
+                          className="w-full h-full object-cover block"
+                        />
+                      )}
+                    </div>
+
                   </div>
 
-                  {/* Badge pour distinguer les vidéos courtes */}
+                  {/* Badge */}
                   {isShort && (
-                    <span className="absolute top-2 left-2 bg-red-600 text-xs font-semibold text-white px-2 py-1 rounded-full shadow-md">
-                      Vidéos courtes
+                    <span className="absolute top-2 left-2 z-10 bg-red-600 text-xs font-semibold text-white px-2 py-1 rounded-full shadow-md">
+                      Short
                     </span>
                   )}
 
-                  {/* Texte associé à la miniature */}
-                  <span className="absolute bottom-1 left-1 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:transition-opacity font-semibold">
-                    {video.date.split("\n").map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))}
-                  </span>
+                  {/* Overlay Texte */}
+                  {/* <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 pointer-events-none z-20">
+                    <span className="text-white font-bold text-lg leading-tight">
+                        {video.title}
+                    </span>
+                    <span className="text-gray-300 text-sm mt-1 whitespace-pre-line">
+                        {video.date}
+                    </span>
+                  </div> */}
                 </div>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
-
-      {/* Modal pour afficher le lecteur YouTube */}
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none scale-[0.5] md:scale-125 lg:scale-150">
-          {selectedVideo && <YouTube videoId={selectedVideo} opts={opts} />}
+              );
+            })}
+          </div>
         </Box>
-      </Modal>
 
-      {/* Widget Calendly */}
-      <div className="flex justify-center mt-6">
-        <PopupWidget
-          url="https://calendly.com/mikha-vizion/30min"
-          rootElement={document.getElementById("root")}
-          text="Réserver un appel !"
-          textColor="#ffffff"
-          color="#4f46e5"
-        />
-        
+        {/* Modal pour afficher le lecteur YouTube */}
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none w-[90vw] md:w-[80vw] max-w-[1200px] aspect-video bg-black shadow-2xl">
+             {selectedVideo && (
+               <YouTube 
+                 videoId={selectedVideo} 
+                 opts={{
+                   width: '100%',
+                   height: '100%',
+                   playerVars: { autoplay: 1 }
+                 }} 
+                 className="w-full h-full"
+               />
+             )}
+          </Box>
+        </Modal>
+
+        {/* Widget Calendly */}
+        <div className="flex justify-center mt-6">
+          <PopupWidget
+            url="https://calendly.com/mikha-vizion/30min"
+            rootElement={document.getElementById("root")}
+            text="Réserver un appel !"
+            textColor="#ffffff"
+            color="#4f46e5"
+          />
+        </div>
+
+        <Footer />
       </div>
-      <Footer />
     </div>
-    
   );
-  
 };
 
 export default AllWork;
