@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Box from "@mui/system/Box";
@@ -147,29 +147,59 @@ const AllWork = () => {
         </div>
 
         <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
-            {/* Logique Gemini : alternance H+V, grille 4 colonnes */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
+            {/* Fusion Firestore + Patterns Gemini : tri par order, puis patterns dynamiques */}
             {(() => {
-              const filtered = selectedCategory === "Toutes les vidéos"
-                ? filteredVideos
-                : filteredVideos.filter(v => v.category?.includes(selectedCategory));
+              // 1. Trier par order (priorité absolue)
+              const sortedByOrder = [...filteredVideos].sort((a, b) => {
+                const orderA = a.order || 999;
+                const orderB = b.order || 999;
+                return orderA - orderB;
+              });
 
-              if (selectedCategory !== "Toutes les vidéos") return filtered;
-
-              const horizontals = filtered.filter(v => !v.orientation || v.orientation !== "vertical");
-              const verticals = filtered.filter(v => v.orientation === "vertical" || v.category?.includes("Vidéos courtes"));
-
-              const result = [];
-              const max = Math.max(horizontals.length, verticals.length);
-
-              for (let i = 0; i < max; i++) {
-                if (horizontals[i]) result.push(horizontals[i]);
-                if (verticals[i]) result.push(verticals[i]);
+              // 2. Assigner patterns dynamiques si "Toutes les vidéos"
+              if (selectedCategory === "Toutes les vidéos") {
+                const videosWithPatterns = [...sortedByOrder];
+                
+                // Logique simple basée sur l'ordre exact
+                for (let i = 0; i < videosWithPatterns.length; i++) {
+                  const video = videosWithPatterns[i];
+                  const isVertical = video.orientation === "vertical" || video.category?.includes("Vidéos courtes");
+                  
+                  // Garder le pattern existant si défini
+                  if (video.pattern) continue;
+                  
+                  // Attribution basée sur la position dans l'ordre
+                  if (i === 0) {
+                    // Position 1 : hero si horizontal, side si vertical
+                    video.pattern = isVertical ? "side" : "hero";
+                  } else if (i === 1) {
+                    // Position 2 : side si vertical, sinon hero
+                    video.pattern = isVertical ? "side" : "hero";
+                  } else if (i === 2 || i === 3) {
+                    // Positions 3 et 4 : duo pour horizontales (2+2=4)
+                    video.pattern = isVertical ? "side" : "duo";
+                  } else {
+                    // Positions 5+ : side pour verticales, duo pour horizontales
+                    video.pattern = isVertical ? "side" : "duo";
+                  }
+                }
+                
+                return videosWithPatterns;
               }
-              return result;
+
+              // 3. Sinon, retourner les vidéos triées par order
+              return sortedByOrder;
             })().map((video, index) => {
               const isVertical = video.orientation === "vertical" || video.category?.includes("Vidéos courtes");
               const isShort = isVertical;
+
+              // Logique de colSpan selon pattern Gemini
+              let colSpan = "md:col-span-2";
+              if (video.pattern === "hero") colSpan = "md:col-span-3";
+              else if (video.pattern === "side") colSpan = "md:col-span-1";
+              else if (isVertical) colSpan = "md:col-span-1";
+              else if (!isVertical && video.pattern !== "duo") colSpan = "md:col-span-3";
 
               const thumbnailSrc =
                 video.thumbnailUrl && video.thumbnailUrl.trim().length > 0
@@ -179,14 +209,13 @@ const AllWork = () => {
               return (
                 <div
                   key={index}
-                  className={`relative group w-full bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${
+                  className={`relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${
                     isVertical 
-                      ? "col-span-1 aspect-[9/16]" // Verticale : Ratio 9:16 forcé (maître hauteur)
-                      : "col-span-1 md:col-span-3 h-full" // Horizontale : 3/4 largeur, s'adapte à la hauteur
+                      ? "aspect-[9/16]" // Verticale : ratio 9:16
+                      : video.pattern === "duo" 
+                        ? "aspect-video" // Duo : ratio 16:9 standard pour alignement
+                        : "aspect-video md:aspect-auto h-full min-h-[300px]" // Hero : ratio flexible avec hauteur minimale
                   }`}
-                  style={{
-                    // Pas de gridColumn/gridRow fixes, gérés par les classes Tailwind
-                  }}
                   onClick={() => handleThumbnailClick(video.id)} // Gère le clic (desktop + mobile)
                   onMouseEnter={() => setHoveredVideo(video.id)}
                   onMouseLeave={() => setHoveredVideo(null)}
