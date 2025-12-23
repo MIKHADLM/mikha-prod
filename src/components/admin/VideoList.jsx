@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { arrayMoveImmutable } from 'array-move';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { 
   Box, 
@@ -33,9 +33,13 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: 'transform 250ms cubic-bezier(0.2, 0, 0, 1)',
     touchAction: 'none',
-    opacity: isProcessing ? 0.7 : 1,
+    opacity: transform ? 0.3 : 1,
+    zIndex: transform ? 9999 : 'auto',
+    boxShadow: transform ? 'none' : 'none',
+    scale: transform ? 1 : 1,
+    position: 'relative',
   };
 
   const thumbnailUrl = video.thumbnailUrl || `https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`;
@@ -43,12 +47,15 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
   const isVertical = video.orientation === 'vertical';
 
   return (
-    <ListItem
+    <div
       ref={setNodeRef}
       style={style}
-      sx={{
-        borderBottom: '1px solid',
-        borderColor: 'divider',
+      className="sortable-item-wrapper"
+    >
+      <ListItem
+        sx={{
+          borderBottom: '1px solid',
+          borderColor: 'divider',
         bgcolor: 'background.paper',
         '&:hover': { 
           bgcolor: isProcessing ? 'action.hover' : 'action.hover',
@@ -66,12 +73,13 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
         {...attributes} 
         {...listeners} 
         sx={{ 
-          cursor: isProcessing ? 'not-allowed' : 'grab',
+          cursor: isProcessing ? 'not-allowed' : (transform ? 'grabbing' : 'grab'),
           mr: 2, 
           display: 'flex', 
           alignItems: 'center',
-          opacity: 0.5,
-          transition: 'opacity 0.2s',
+          opacity: transform ? 1 : 0.5,
+          transition: 'opacity 0.2s, transform 0.2s',
+          transform: transform ? 'scale(1.1)' : 'scale(1)',
           '&:active': {
             cursor: isProcessing ? 'not-allowed' : 'grabbing',
           },
@@ -191,25 +199,6 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
         )}
       </Box>
       
-      {isProcessing && (
-        <Box 
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            bgcolor: 'rgba(255, 255, 255, 0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1,
-          }}
-        >
-          <CircularProgress size={24} />
-        </Box>
-      )}
-      
       <ListItemSecondaryAction>
         {isProcessing ? (
           <Box sx={{ display: 'flex', alignItems: 'center', pr: 2 }}>
@@ -247,6 +236,7 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
         )}
       </ListItemSecondaryAction>
     </ListItem>
+    </div>
   );
 };
 
@@ -254,6 +244,7 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
   const [localVideos, setLocalVideos] = useState(videos);
   const [processingIds, setProcessingIds] = useState(new Set());
   const [isDragging, setIsDragging] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
   React.useEffect(() => {
     setLocalVideos(videos);
@@ -272,6 +263,7 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
 
   const handleDragStart = (event) => {
     setIsDragging(true);
+    setActiveId(event.active.id);
     document.body.style.cursor = 'grabbing';
   };
 
@@ -279,6 +271,7 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
     const { active, over } = event;
     
     setIsDragging(false);
+    setActiveId(null);
     document.body.style.cursor = '';
     
     if (!over || active.id === over.id) return;
@@ -365,7 +358,7 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
       autoScroll={false}
     >
       <SortableContext 
-        items={localVideos.map(video => video.id)} 
+        items={localVideos.map(video => video.youtubeId)} 
         strategy={verticalListSortingStrategy}
       >
         <List 
@@ -388,6 +381,89 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
           ))}
         </List>
       </SortableContext>
+      
+      <DragOverlay>
+        {activeId ? (
+          <div
+            style={{
+              width: '100%',
+              transform: 'scale(1.02)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              zIndex: 9999,
+              borderRadius: '8px',
+              border: '2px solid rgba(25, 118, 210, 0.3)',
+            }}
+          >
+            {(() => {
+              const activeVideo = localVideos.find(v => v.youtubeId === activeId);
+              if (!activeVideo) return null;
+              
+              const thumbnailUrl = activeVideo.thumbnailUrl || `https://img.youtube.com/vi/${activeVideo.youtubeId}/mqdefault.jpg`;
+              const category = Array.isArray(activeVideo.category) ? activeVideo.category[0] : activeVideo.category;
+              
+              return (
+                <ListItem
+                  sx={{
+                    borderBottom: '1px solid',
+                    borderColor: 'divider',
+                    bgcolor: '#ffffff',
+                    opacity: 1,
+                    '&:hover': { 
+                      bgcolor: '#f5f5f5',
+                      '& .drag-handle': {
+                        opacity: 1,
+                      }
+                    },
+                    transition: 'all 0.2s',
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Box 
+                    className="drag-handle"
+                    sx={{ 
+                      cursor: 'grabbing',
+                      mr: 2, 
+                      display: 'flex', 
+                      alignItems: 'center',
+                      opacity: 1,
+                    }}
+                  >
+                    <DragIndicator />
+                  </Box>
+                  <Box sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+                    <Avatar
+                      src={thumbnailUrl}
+                      variant="rounded"
+                      sx={{ width: 120, height: 68 }}
+                    />
+                  </Box>
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+                        {activeVideo.title || 'Sans titre'}
+                      </Typography>
+                    }
+                    secondary={
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+                        <Chip 
+                          label={category || 'Non catégorisé'} 
+                          size="small" 
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: '0.7rem' }}
+                        />
+                        <Typography variant="caption" color="text.secondary" noWrap>
+                          ID: {activeVideo.youtubeId}
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                </ListItem>
+              );
+            })()}
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };
