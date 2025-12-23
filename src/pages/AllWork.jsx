@@ -133,15 +133,19 @@ const AllWork = () => {
       {/* Contenu avec marges latérales */}
       <div className="px-4 md:px-8 lg:px-16">
 
-        {/* Boutons de filtrage */}
-        <div className="flex flex-wrap justify-center gap-4 mb-6 px-4">
-          {categories.map((category, index) => (
+        {/* Filtres Stylisés */}
+        <div className="flex flex-wrap justify-center gap-3 mb-16">
+          {categories.map((cat) => (
             <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 duration-300 shadow-lg w-32"
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-8 py-3 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 border ${
+                selectedCategory === cat
+                  ? "bg-white text-black border-white scale-105"
+                  : "bg-transparent text-zinc-500 hover:text-white border-white/10"
+              }`}
             >
-              {category}
+              {cat}
             </button>
           ))}
         </div>
@@ -223,34 +227,39 @@ const AllWork = () => {
                   onTouchEnd={() => setHoveredVideo(null)}
                   onTouchCancel={() => setHoveredVideo(null)}
                 >
-                  
-                  {hoveredVideo === video.id ? (
-                    <YouTube
-                      videoId={video.id}
-                      opts={{
-                        height: '100%',
-                        width: '100%', 
-                        playerVars: {
-                          autoplay: 1,
-                          controls: 0,
-                          mute: 1,
-                          rel: 0,
-                          modestbranding: 1,
-                          playsinline: 1,
-                          loop: 1,
-                          playlist: video.id // Nécessaire pour le loop
-                        },
-                      }}
-                      className="w-full h-full pointer-events-none"
-                      onReady={(e) => e.target.mute()}
-                    />
-                  ) : (
-                    <img
-                      src={thumbnailSrc}
-                      alt={video.title || ""}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  <div className="absolute inset-0 w-full h-full">
+                    {hoveredVideo === video.id ? (
+                      <YouTube
+                        videoId={video.id}
+                        opts={{
+                          height: '100%',
+                          width: '100%', 
+                          playerVars: {
+                            autoplay: 1,
+                            controls: 0,
+                            mute: 1,
+                            rel: 0,
+                            modestbranding: 1,
+                            loop: 1,
+                            playlist: video.id,
+                          },
+                        }}
+                        className="w-full h-full pointer-events-none"
+                        onReady={(event) => {
+                          event.target.playVideo();
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={thumbnailSrc}
+                        alt={video.title}
+                        className={`w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${
+                          !isVertical ? 'object-center' : 'object-top'
+                        }`}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                  </div>
 
                   {/* Badge */}
                   {isShort && (
@@ -260,14 +269,17 @@ const AllWork = () => {
                   )}
 
                   {/* Overlay Texte */}
-                  {/* <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 pointer-events-none z-20">
-                    <span className="text-white font-bold text-lg leading-tight">
-                        {video.title}
-                    </span>
-                    <span className="text-gray-300 text-sm mt-1 whitespace-pre-line">
-                        {video.date}
-                    </span>
-                  </div> */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <span className="bg-white/10 backdrop-blur-xl border border-white/10 px-3 py-1 rounded-full text-[8px] text-white font-black uppercase tracking-[0.2em] mb-3 inline-block">
+                        {video.category?.[0] || "Production"}
+                      </span>
+                      <h3 className={`font-black tracking-tighter italic uppercase leading-none text-white text-3xl md:text-4xl`}>
+                        {video.title || "Work"}
+                      </h3>
+                    </div>
+                  </div>
+
                 </div>
               );
             })}
