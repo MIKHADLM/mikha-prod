@@ -145,7 +145,7 @@ export async function updateVideoOrder(videos) {
     videos.forEach((videoFromUI) => {
       // 2. On cherche le document par youtubeId
       const match = firestoreDocs.find(d => 
-        d.youtubeId === videoFromUI.id
+        d.youtubeId === videoFromUI.youtubeId
       );
 
       if (match) {
