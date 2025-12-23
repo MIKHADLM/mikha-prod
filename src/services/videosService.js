@@ -22,12 +22,20 @@ const VIDEOS_COLLECTION = "videos";
  */
 export async function getVideos() {
   try {
-    // Force la récupération depuis le serveur (évite le cache corrompu IndexedDB)
-    const q = query(collection(db, VIDEOS_COLLECTION), orderBy("order", "asc"));
-    const snapshot = await getDocs(q);
+    const q = query(
+      collection(db, VIDEOS_COLLECTION), 
+      orderBy("order", "asc")
+    );
+    
+    // Forcer la récupération depuis le serveur (désactiver le cache)
+    const snapshot = await getDocs(q, { 
+      source: 'server'  // Force server-side, ignore cache
+    });
     
     if (snapshot.metadata.fromCache) {
-      console.warn("Attention : Données chargées depuis le cache local (potentiellement obsolètes).");
+      console.warn("Attention : Données chargées depuis le cache local malgré la demande serveur");
+    } else {
+      console.log("Données chargées depuis le serveur Firebase");
     }
 
     return snapshot.docs.map((doc) => ({
@@ -52,16 +60,23 @@ export async function saveVideo(videoData) {
     };
 
     if (id && id.length > 15) {
+      // Modification d'une vidéo existante
       const docRef = doc(db, VIDEOS_COLLECTION, id);
       await updateDoc(docRef, videoToSave);
       return { id, ...videoToSave };
     } else {
+      // Création d'une nouvelle vidéo - calculer le plus grand ordre
+      const videos = await getVideos();
+      const maxOrder = videos.length > 0 
+        ? Math.max(...videos.map(v => v.order || 0))
+        : 0;
+      
       const docRef = await addDoc(collection(db, VIDEOS_COLLECTION), {
         ...videoToSave,
         createdAt: serverTimestamp(),
-        order: videoData.order || 0
+        order: maxOrder + 1  // Nouvelle vidéo à la fin
       });
-      return { id: docRef.id, ...videoToSave };
+      return { id: docRef.id, ...videoToSave, order: maxOrder + 1 };
     }
   } catch (error) {
     console.error("Erreur saveVideo:", error);
@@ -85,7 +100,7 @@ export async function deleteVideo(videoId) {
     if (docSnap.exists()) {
       videoData = docSnap.data();
     } else {
-      const q = query(collection(db, VIDEOS_COLLECTION), where("id", "==", videoId));
+      const q = query(collection(db, VIDEOS_COLLECTION), where("youtubeId", "==", videoId));
       const qSnap = await getDocs(q);
       
       if (!qSnap.empty) {
@@ -117,35 +132,37 @@ export async function updateVideoOrder(videos) {
   try {
     console.log("Mise à jour de l'ordre en cours...");
     
-    // 1. On récupère les IDs réels depuis le serveur obligatoirement
+    // 1. On récupère les documents depuis le serveur avec leurs IDs
     const snapshot = await getDocs(collection(db, VIDEOS_COLLECTION));
     const firestoreDocs = snapshot.docs.map(d => ({ 
-      id: d.id, 
-      id: d.data().id 
+      firestoreId: d.id,           // ID du document Firestore
+      youtubeId: d.data().id       // ID YouTube stocké dans le champ "id"
     }));
 
     const batch = writeBatch(db);
     let count = 0;
 
     videos.forEach((videoFromUI) => {
+      // 2. On cherche le document par youtubeId
       const match = firestoreDocs.find(d => 
-        d.id === videoFromUI.id || 
-        d.id === videoFromUI.id || 
-        d.id === videoFromUI.id
+        d.youtubeId === videoFromUI.id
       );
 
       if (match) {
-        const docRef = doc(db, VIDEOS_COLLECTION, match.id);
+        const docRef = doc(db, VIDEOS_COLLECTION, match.firestoreId);
         batch.update(docRef, { 
           order: Number(videoFromUI.order), // Force le format nombre
           updatedAt: serverTimestamp()
         });
         count++;
+        console.log(`Mise à jour ordre: ${match.youtubeId} -> ${videoFromUI.order}`);
+      } else {
+        console.warn(`Vidéo non trouvée: ${videoFromUI.id}`);
       }
     });
 
     if (count > 0) {
-      // 2. On attend la confirmation réelle du serveur
+      // 3. On attend la confirmation réelle du serveur
       await batch.commit();
       console.log(`Serveur : Ordre de ${count} vidéos enregistré.`);
       
@@ -153,6 +170,8 @@ export async function updateVideoOrder(videos) {
       if (typeof window !== 'undefined') {
         console.log("Synchronisation terminée.");
       }
+    } else {
+      console.warn("Aucune vidéo mise à jour - vérifiez les IDs");
     }
     
     return true;

@@ -286,8 +286,8 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
     try {
       setProcessingIds(prev => new Set([...prev, active.id]));
       
-      const oldIndex = localVideos.findIndex(item => item.id === active.id);
-      const newIndex = localVideos.findIndex(item => item.id === over.id);
+      const oldIndex = localVideos.findIndex(item => item.youtubeId === active.id);
+      const newIndex = localVideos.findIndex(item => item.youtubeId === over.id);
       
       if (oldIndex === -1 || newIndex === -1) return;
       

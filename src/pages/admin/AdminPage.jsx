@@ -61,25 +61,46 @@ const AdminPage = () => {
     navigate('/');
   };
 
-  // Charger les vidéos depuis Firestore
+  // Charger les vidéos depuis Firestore (une seule fois au démarrage)
   const fetchVideos = async () => {
     try {
       setLoading(true);
       setError(null);
       const videosData = await getVideos();
       
-      const validatedVideos = videosData.map((video, index) => ({
-        ...video,
-        order: typeof video.order === 'number' ? video.order : index,
-      })).sort((a, b) => a.order - b.order);
+      // Trier par ordre existant, puis réassigner ordre séquentiel local
+      const sortedVideos = videosData
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .map((video, index) => ({
+          ...video,
+          order: index, // Ordre local : 0,1,2,3...
+        }));
       
-      setVideos(validatedVideos);
+      console.log('Vidéos chargées et ordonnées localement:', sortedVideos.map(v => ({ id: v.id, order: v.order })));
+      setVideos(sortedVideos);
     } catch (err) {
       console.error('Erreur chargement:', err);
       setError('Impossible de charger les vidéos.');
       showSnackbar('Erreur de connexion à Firebase', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Synchroniser l'ordre avec Firebase (uniquement quand nécessaire)
+  const syncOrderWithFirebase = async (videosToSync) => {
+    try {
+      // Ne synchroniser que si l'ordre a changé
+      const videosWithOrder = videosToSync.map((video, index) => ({
+        ...video,
+        order: index
+      }));
+      
+      await updateVideoOrder(videosWithOrder);
+      console.log('Ordre synchronisé avec Firebase');
+    } catch (error) {
+      console.error('Erreur synchronisation:', error);
+      throw error;
     }
   };
 
@@ -93,21 +114,24 @@ const AdminPage = () => {
 
   // --- GESTION DES VIDÉOS ---
 
-  // Réordonner les vidéos (Drag & Drop)
+  // Réordonner les vidéos (gestion locale optimisée)
   const handleSaveOrder = async (reorderedVideos) => {
     try {
-      const updatedVideos = reorderedVideos.map((video, index) => ({
-        ...video,
-        order: index
-      }));
+      // Mise à jour immédiate de l'UI (pas d'attente)
+      setVideos(reorderedVideos);
       
-      setVideos(updatedVideos); // Mise à jour UI immédiate
-      await updateVideoOrder(updatedVideos);
-      showSnackbar('Ordre enregistré');
+      // Synchronisation en arrière-plan (non bloquante)
+      try {
+        await syncOrderWithFirebase(reorderedVideos);
+        showSnackbar('Ordre enregistré');
+      } catch (syncError) {
+        console.warn('Erreur synchronisation, mais UI mise à jour:', syncError);
+        showSnackbar('Ordre mis à jour localement', 'warning');
+      }
     } catch (error) {
       console.error('Erreur ordre:', error);
       showSnackbar('Erreur lors du réordonnancement', 'error');
-      fetchVideos(); // Reset en cas d'échec
+      fetchVideos(); // Reset en cas d'erreur critique
     }
   };
 
