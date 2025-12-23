@@ -4,7 +4,8 @@ import Homepage from "./pages/Homepage";
 import AllWork from "./pages/AllWork";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import Services from "./pages/Services"
+import Services from "./pages/Services";
+import AdminPage from "./pages/admin/AdminPage";
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +28,10 @@ export const router = createBrowserRouter([
         path: "/services",
         element: <Services />,
       },
-
+      {
+        path: "/admin",
+        element: <AdminPage />,
+      },
     ],
   },
 ]);

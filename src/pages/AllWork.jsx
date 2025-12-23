@@ -208,7 +208,7 @@ const AllWork = () => {
               const thumbnailSrc =
                 video.thumbnailUrl && video.thumbnailUrl.trim().length > 0
                   ? video.thumbnailUrl
-                  : `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
+                  : `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`;
 
               return (
                 <div
@@ -220,17 +220,17 @@ const AllWork = () => {
                         ? "aspect-video" // Duo : ratio 16:9 standard pour alignement
                         : "aspect-video md:aspect-auto h-full min-h-[300px]" // Hero : ratio flexible avec hauteur minimale
                   }`}
-                  onClick={() => handleThumbnailClick(video.id)} // Gère le clic (desktop + mobile)
-                  onMouseEnter={() => setHoveredVideo(video.id)}
+                  onClick={() => handleThumbnailClick(video.youtubeId)} // Gère le clic (desktop + mobile)
+                  onMouseEnter={() => setHoveredVideo(video.youtubeId)}
                   onMouseLeave={() => setHoveredVideo(null)}
-                  onTouchStart={() => setHoveredVideo(video.id)}
+                  onTouchStart={() => setHoveredVideo(video.youtubeId)}
                   onTouchEnd={() => setHoveredVideo(null)}
                   onTouchCancel={() => setHoveredVideo(null)}
                 >
                   <div className="absolute inset-0 w-full h-full">
-                    {hoveredVideo === video.id ? (
+                    {hoveredVideo === video.youtubeId ? (
                       <YouTube
-                        videoId={video.id}
+                        videoId={video.youtubeId}
                         opts={{
                           height: '100%',
                           width: '100%', 
@@ -241,7 +241,7 @@ const AllWork = () => {
                             rel: 0,
                             modestbranding: 1,
                             loop: 1,
-                            playlist: video.id,
+                            playlist: video.youtubeId,
                           },
                         }}
                         className="w-full h-full pointer-events-none"
