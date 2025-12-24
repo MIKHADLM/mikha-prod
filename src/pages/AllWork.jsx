@@ -224,26 +224,38 @@ const AllWork = () => {
                       >
                         <div className="absolute inset-0 w-full h-full">
                           {hoveredVideo === video.youtubeId ? (
-                            <YouTube
-                              videoId={video.youtubeId}
-                              opts={{
-                                height: '100%',
-                                width: '100%', 
-                                playerVars: {
-                                  autoplay: 1,
-                                  controls: 0,
-                                  mute: 1,
-                                  rel: 0,
-                                  modestbranding: 1,
-                                  loop: 1,
-                                  playlist: video.youtubeId,
-                                },
-                              }}
-                              className="w-full h-full pointer-events-none"
-                              onReady={(event) => {
-                                event.target.playVideo();
-                              }}
-                            />
+                            video.previewClipUrl ? (
+                              <video
+                                src={video.previewClipUrl}
+                                className="w-full h-full object-cover pointer-events-none"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="metadata"
+                              />
+                            ) : (
+                              <YouTube
+                                videoId={video.youtubeId}
+                                opts={{
+                                  height: '100%',
+                                  width: '100%', 
+                                  playerVars: {
+                                    autoplay: 1,
+                                    controls: 0,
+                                    mute: 1,
+                                    rel: 0,
+                                    modestbranding: 1,
+                                    loop: 1,
+                                    playlist: video.youtubeId,
+                                  },
+                                }}
+                                className="w-full h-full pointer-events-none"
+                                onReady={(event) => {
+                                  event.target.playVideo();
+                                }}
+                              />
+                            )
                           ) : (
                             <img
                               src={thumbnailSrc}
