@@ -136,7 +136,7 @@ export async function updateVideoOrder(videos) {
     const snapshot = await getDocs(collection(db, VIDEOS_COLLECTION));
     const firestoreDocs = snapshot.docs.map(d => ({ 
       firestoreId: d.id,           // ID du document Firestore
-      youtubeId: d.data().id       // ID YouTube stocké dans le champ "id"
+      youtubeId: d.data().youtubeId // ID YouTube stocké dans le champ "youtubeId"
     }));
 
     const batch = writeBatch(db);
