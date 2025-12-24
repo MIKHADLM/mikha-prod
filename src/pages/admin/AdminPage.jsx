@@ -154,7 +154,11 @@ const AdminPage = () => {
 
     // 1. Sauvegarde pour rollback et mise à jour UI immédiate
     const backupVideos = [...videos];
-    setVideos(prev => prev.filter(v => v.id !== videoId && v.youtubeId !== videoId));
+    setVideos(prev => prev.filter(v => 
+      (v.firestoreId !== videoId) && 
+      (v.id !== videoId) && 
+      (v.youtubeId !== videoId)
+    ));
 
     try {
       // 2. Appel au service Firebase
@@ -186,6 +190,11 @@ const AdminPage = () => {
         order: typeof videoData.order === 'number' ? videoData.order : videos.length,
         date: videoData.date || new Date().toISOString().split('T')[0],
       };
+      
+      // Si c'est une modification, s'assurer qu'on a le bon ID Firestore
+      if (currentVideo && currentVideo.firestoreId) {
+        videoToSave.firestoreId = currentVideo.firestoreId;
+      }
       
       await saveVideo(videoToSave);
       

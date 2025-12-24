@@ -53,14 +53,19 @@ export async function getVideos() {
  */
 export async function saveVideo(videoData) {
   try {
-    const { id, ...data } = videoData;
+    const { id, firestoreId, ...data } = videoData;
     const videoToSave = {
       ...data,
       updatedAt: serverTimestamp(),
     };
 
-    if (id && id.length > 15) {
-      // Modification d'une vidéo existante
+    if (firestoreId && firestoreId.length > 15) {
+      // Modification d'une vidéo existante avec ID Firestore
+      const docRef = doc(db, VIDEOS_COLLECTION, firestoreId);
+      await updateDoc(docRef, videoToSave);
+      return { id: firestoreId, ...videoToSave };
+    } else if (id && id.length > 15) {
+      // Modification d'une vidéo existante (ancien format)
       const docRef = doc(db, VIDEOS_COLLECTION, id);
       await updateDoc(docRef, videoToSave);
       return { id, ...videoToSave };
@@ -76,7 +81,7 @@ export async function saveVideo(videoData) {
         createdAt: serverTimestamp(),
         order: maxOrder + 1  // Nouvelle vidéo à la fin
       });
-      return { id: docRef.id, ...videoToSave, order: maxOrder + 1 };
+      return { id: docRef.id, firestoreId: docRef.id, ...videoToSave, order: maxOrder + 1 };
     }
   } catch (error) {
     console.error("Erreur saveVideo:", error);

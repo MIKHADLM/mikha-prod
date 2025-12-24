@@ -185,12 +185,16 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
               )}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
-              <Chip 
-                label={category || 'Non catégorisé'} 
-                size="small" 
-                variant="outlined"
-                sx={{ height: 20, fontSize: '0.7rem' }}
-              />
+              <Typography component="span" sx={{ 
+                fontSize: '0.7rem', 
+                color: 'text.secondary',
+                display: 'inline-block',
+                backgroundColor: 'action.hover',
+                padding: '2px 6px',
+                borderRadius: '4px'
+              }}>
+                {category || 'Non catégorisé'}
+              </Typography>
               <Typography variant="caption" color="text.secondary" noWrap>
                 ID: {video.youtubeId}
               </Typography>
@@ -225,7 +229,7 @@ const SortableItem = ({ id, video, onEdit, onDelete, isProcessing }) => {
                   edge="end" 
                   aria-label="supprimer" 
                   color="error" 
-                  onClick={() => onDelete(video.youtubeId)}
+                  onClick={() => onDelete(video.firestoreId || video.id || video.youtubeId)}
                   disabled={isProcessing}
                 >
                   <Delete />
@@ -369,9 +373,9 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
             minHeight: 200,
           }}
         >
-          {localVideos.map((video, index) => (
+          {localVideos.map((video) => (
             <SortableItem 
-              key={`${video.youtubeId}-${index}`} 
+              key={video.firestoreId || video.id || video.youtubeId} 
               id={video.youtubeId} 
               video={video}
               onEdit={onEdit}
@@ -395,7 +399,11 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
             }}
           >
             {(() => {
-              const activeVideo = localVideos.find(v => v.youtubeId === activeId);
+              const activeVideo = localVideos.find(v => 
+                v.youtubeId === activeId || 
+                v.id === activeId || 
+                v.firestoreId === activeId
+              );
               if (!activeVideo) return null;
               
               const thumbnailUrl = activeVideo.thumbnailUrl || `https://img.youtube.com/vi/${activeVideo.youtubeId}/mqdefault.jpg`;
@@ -445,14 +453,15 @@ const VideoList = ({ videos, onVideosUpdate, onEdit, onDelete, loading = false }
                       </Typography>
                     }
                     secondary={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
-                        <Chip 
-                          label={category || 'Non catégorisé'} 
-                          size="small" 
-                          variant="outlined"
-                          sx={{ height: 20, fontSize: '0.7rem' }}
-                        />
-                        <Typography variant="caption" color="text.secondary" noWrap>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5, flexWrap: 'wrap' }}>
+                        <Typography component="span" sx={{ 
+                          fontSize: '0.7rem', 
+                          color: 'text.secondary',
+                          display: 'inline-block'
+                        }}>
+                          {category || 'Non catégorisé'}
+                        </Typography>
+                        <Typography component="span" variant="caption" color="text.secondary" noWrap>
                           ID: {activeVideo.youtubeId}
                         </Typography>
                       </Box>

@@ -173,7 +173,8 @@ const VideoForm = ({ open, onClose, onSave, video, isSaving }) => {
       
       const videoData = {
         ...formData,
-        id: (video && video.id) || formData.id,
+        id: video?.firestoreId || video?.id || formData.id, // Utiliser l'ID Firestore existant
+        youtubeId: formData.youtubeId, // Garder le youtubeId séparé
         thumbnailUrl,
         previewClipUrl
       };
