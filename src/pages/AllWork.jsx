@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Box from "@mui/system/Box";
@@ -11,29 +11,106 @@ import { getVideos } from "../services/videosService";
 const categories = ["Toutes les vidéos", "Clip musicaux", "Publicité", "Vidéos YouTube", "Vidéos courtes"];
 
 const AllWork = () => {
+  const [hoveredVideo, setHoveredVideo] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Toutes les vidéos");
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [open, setOpen] = useState(false);
-
-  const [menuOpen, setMenuOpen] = useState(false);  // Ajout de l'état pour ouvrir/fermer le menu mobile
-  const [hoveredVideo, setHoveredVideo] = useState(null);
   const [remoteVideos, setRemoteVideos] = useState([]);
 
+  // useRef pour stocker les éléments vidéo préchargés (évite les re-renders)
+  const preloadedVideosRef = useRef(new Map());
+  const videoElementsRef = useRef(new Set()); // Pour le nettoyage
+
+  // Gestion du cycle de vie avec nettoyage, support multi-format et préchargement intelligent
   useEffect(() => {
     const fetchVideos = async () => {
-      try {
-        const data = await getVideos();
-        console.log("VIDEOS FIRESTORE", data);
-        if (Array.isArray(data) && data.length > 0) {
-          setRemoteVideos(data);
+      const data = await getVideos();
+      setRemoteVideos(data);
+      
+      // Fonction de préchargement avec support multi-format
+      const preloadVideo = (video) => {
+        if (!video.previewClipUrl || preloadedVideosRef.current.has(video.youtubeId)) {
+          return;
         }
-      } catch (error) {
-        console.error("Erreur lors du chargement des vidéos depuis Firestore", error);
+
+        const videoElement = document.createElement('video');
+        videoElement.preload = 'auto';
+        videoElement.muted = true;
+        videoElement.loop = true;
+        videoElement.playsInline = true;
+        videoElement.style.display = 'none';
+        
+        // Support multi-format : WebM prioritaire
+        const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
+        const mp4Url = video.previewClipUrl;
+        
+        if (video.previewClipUrl.includes('.webm')) {
+          videoElement.src = video.previewClipUrl;
+        } else {
+          // Tenter WebM d'abord, fallback MP4
+          const sourceWebM = document.createElement('source');
+          sourceWebM.src = webmUrl;
+          sourceWebM.type = 'video/webm';
+          
+          const sourceMP4 = document.createElement('source');
+          sourceMP4.src = mp4Url;
+          sourceMP4.type = 'video/mp4';
+          
+          videoElement.appendChild(sourceWebM);
+          videoElement.appendChild(sourceMP4);
+        }
+        
+        document.body.appendChild(videoElement);
+        
+        // Stocker pour nettoyage
+        videoElementsRef.current.add(videoElement);
+        preloadedVideosRef.current.set(video.youtubeId, videoElement);
+        
+        // Forcer le chargement
+        videoElement.load();
+      };
+      
+      // Préchargement intelligent : 6 premiers en priorité, le reste après
+      const videosWithPreview = data.filter(v => v.previewClipUrl);
+      const priorityVideos = videosWithPreview.slice(0, 6);
+      const remainingVideos = videosWithPreview.slice(6);
+      
+      // Charger les 6 premiers immédiatement
+      priorityVideos.forEach(video => preloadVideo(video));
+      
+      // Charger le reste avec requestIdleCallback ou setTimeout
+      const loadRemainingVideos = () => {
+        remainingVideos.forEach((video, index) => {
+          setTimeout(() => preloadVideo(video), index * 200); // Espacer les chargements
+        });
+      };
+      
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadRemainingVideos);
+      } else {
+        setTimeout(loadRemainingVideos, 1000);
       }
     };
-
+    
     fetchVideos();
+    
+    // Nettoyage au démontage
+    return () => {
+      videoElementsRef.current.forEach(element => {
+        if (element.parentNode) {
+          element.parentNode.removeChild(element);
+        }
+      });
+      videoElementsRef.current.clear();
+      preloadedVideosRef.current.clear();
+    };
   }, []);
+
+  // Gestionnaire de survol optimisé
+  const handleVideoHover = (video) => {
+    setHoveredVideo(video.youtubeId);
+  };
 
   const opts = {
     playerVars: {
@@ -188,10 +265,8 @@ const AllWork = () => {
             {(() => {
               // Trier par ordre croissant et créer les groupes
               const sortedVideos = [...filteredVideos].sort((a, b) => (a.order || 0) - (b.order || 0));
-              console.log("Ordre AllWork:", sortedVideos.map(v => ({ title: v.title, order: v.order })));
               
               const videoGroups = createVideoGroups(sortedVideos);
-              console.log("Video groups:", videoGroups.map(g => ({ type: g.type, layout: g.layout, videos: g.videos.length })));
               
               return videoGroups.map((group, groupIndex) => (
                 <React.Fragment key={`group-${groupIndex}`}>
@@ -199,8 +274,6 @@ const AllWork = () => {
                     const isVertical = video.orientation === "vertical" || video.category?.includes("Vidéos courtes");
                     const isShort = isVertical;
                     const colSpan = getColSpan(group, videoIndex);
-
-                    console.log(`Video ${video.title}: isVertical=${isVertical}, colSpan=${colSpan}, group=${group.layout}`);
 
                     const thumbnailSrc =
                       video.thumbnailUrl && video.thumbnailUrl.trim().length > 0
@@ -216,7 +289,7 @@ const AllWork = () => {
                             : "aspect-video" // Horizontales : toujours 16:9 pour éviter la déformation
                         }`}
                         onClick={() => handleThumbnailClick(video.youtubeId)} // Gère le clic (desktop + mobile)
-                        onMouseEnter={() => setHoveredVideo(video.youtubeId)}
+                        onMouseEnter={() => handleVideoHover(video)}
                         onMouseLeave={() => setHoveredVideo(null)}
                         onTouchStart={() => setHoveredVideo(video.youtubeId)}
                         onTouchEnd={() => setHoveredVideo(null)}
@@ -226,13 +299,60 @@ const AllWork = () => {
                           {hoveredVideo === video.youtubeId ? (
                             video.previewClipUrl ? (
                               <video
-                                src={video.previewClipUrl}
+                                key={video.youtubeId}
+                                ref={(el) => {
+                                  if (el && !el.dataset.initialized) {
+                                    el.dataset.initialized = 'true';
+                                    
+                                    // Utiliser l'élément préchargé si disponible
+                                    const preloadedElement = preloadedVideosRef.current.get(video.youtubeId);
+                                    if (preloadedElement) {
+                                      // Cloner les sources de l'élément préchargé
+                                      const sources = preloadedElement.querySelectorAll('source');
+                                      if (sources.length > 0) {
+                                        // Multi-format : copier les sources
+                                        sources.forEach(source => {
+                                          const newSource = source.cloneNode(true);
+                                          el.appendChild(newSource);
+                                        });
+                                      } else {
+                                        // Format unique : copier src
+                                        el.src = preloadedElement.src;
+                                      }
+                                      
+                                      // Copier les attributs
+                                      el.preload = 'auto';
+                                      el.muted = true;
+                                      el.loop = true;
+                                      el.playsInline = true;
+                                      el.load();
+                                    } else {
+                                      // Fallback : créer les sources
+                                      const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
+                                      
+                                      if (video.previewClipUrl.includes('.webm')) {
+                                        el.src = video.previewClipUrl;
+                                      } else {
+                                        const sourceWebM = document.createElement('source');
+                                        sourceWebM.src = webmUrl;
+                                        sourceWebM.type = 'video/webm';
+                                        
+                                        const sourceMP4 = document.createElement('source');
+                                        sourceMP4.src = video.previewClipUrl;
+                                        sourceMP4.type = 'video/mp4';
+                                        
+                                        el.appendChild(sourceWebM);
+                                        el.appendChild(sourceMP4);
+                                      }
+                                    }
+                                  }
+                                }}
                                 className="w-full h-full object-cover pointer-events-none"
                                 autoPlay
                                 muted
                                 loop
                                 playsInline
-                                preload="metadata"
+                                preload="auto"
                               />
                             ) : (
                               <YouTube
