@@ -27,7 +27,7 @@ const AllWork = () => {
     const fetchVideos = async () => {
       const data = await getVideos();
       setRemoteVideos(data);
-      
+
       // Fonction de préchargement avec support multi-format
       const preloadVideo = (video) => {
         if (!video.previewClipUrl || preloadedVideosRef.current.has(video.youtubeId)) {
@@ -40,11 +40,11 @@ const AllWork = () => {
         videoElement.loop = true;
         videoElement.playsInline = true;
         videoElement.style.display = 'none';
-        
+
         // Support multi-format : WebM prioritaire
         const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
         const mp4Url = video.previewClipUrl;
-        
+
         if (video.previewClipUrl.includes('.webm')) {
           videoElement.src = video.previewClipUrl;
         } else {
@@ -52,49 +52,49 @@ const AllWork = () => {
           const sourceWebM = document.createElement('source');
           sourceWebM.src = webmUrl;
           sourceWebM.type = 'video/webm';
-          
+
           const sourceMP4 = document.createElement('source');
           sourceMP4.src = mp4Url;
           sourceMP4.type = 'video/mp4';
-          
+
           videoElement.appendChild(sourceWebM);
           videoElement.appendChild(sourceMP4);
         }
-        
+
         document.body.appendChild(videoElement);
-        
+
         // Stocker pour nettoyage
         videoElementsRef.current.add(videoElement);
         preloadedVideosRef.current.set(video.youtubeId, videoElement);
-        
+
         // Forcer le chargement
         videoElement.load();
       };
-      
+
       // Préchargement intelligent : 6 premiers en priorité, le reste après
       const videosWithPreview = data.filter(v => v.previewClipUrl);
       const priorityVideos = videosWithPreview.slice(0, 6);
       const remainingVideos = videosWithPreview.slice(6);
-      
+
       // Charger les 6 premiers immédiatement
       priorityVideos.forEach(video => preloadVideo(video));
-      
+
       // Charger le reste avec requestIdleCallback ou setTimeout
       const loadRemainingVideos = () => {
         remainingVideos.forEach((video, index) => {
           setTimeout(() => preloadVideo(video), index * 200); // Espacer les chargements
         });
       };
-      
+
       if ('requestIdleCallback' in window) {
         requestIdleCallback(loadRemainingVideos);
       } else {
         setTimeout(loadRemainingVideos, 1000);
       }
     };
-    
+
     fetchVideos();
-    
+
     // Nettoyage au démontage
     return () => {
       videoElementsRef.current.forEach(element => {
@@ -139,16 +139,16 @@ const AllWork = () => {
   const createVideoGroups = (videos) => {
     const groups = [];
     let i = 0;
-    
+
     while (i < videos.length) {
       const currentVideo = videos[i];
       const currentIsVertical = currentVideo.orientation === "vertical" || currentVideo.category?.includes("Vidéos courtes");
-      
+
       // Vérifier si on peut former un groupe avec les vidéos suivantes
       if (i < videos.length - 1) {
         const nextVideo = videos[i + 1];
         const nextIsVertical = nextVideo.orientation === "vertical" || nextVideo.category?.includes("Vidéos courtes");
-        
+
         // Cas H+V ou V+H : formats différents qui peuvent partager une ligne
         if (currentIsVertical !== nextIsVertical) {
           groups.push({
@@ -159,7 +159,7 @@ const AllWork = () => {
           i += 2; // Sauter les deux vidéos
           continue;
         }
-        
+
         // Cas H+H : deux horizontales consécutives
         if (!currentIsVertical && !nextIsVertical) {
           groups.push({
@@ -171,17 +171,17 @@ const AllWork = () => {
           continue;
         }
       }
-      
+
       // Vérifier si on peut avoir 4 vidéos verticales consécutives
       if (currentIsVertical && i <= videos.length - 4) {
         const v1 = videos[i + 1];
         const v2 = videos[i + 2];
         const v3 = videos[i + 3];
-        
+
         const v1IsVertical = v1.orientation === "vertical" || v1.category?.includes("Vidéos courtes");
         const v2IsVertical = v2.orientation === "vertical" || v2.category?.includes("Vidéos courtes");
         const v3IsVertical = v3.orientation === "vertical" || v3.category?.includes("Vidéos courtes");
-        
+
         if (v1IsVertical && v2IsVertical && v3IsVertical) {
           groups.push({
             type: 'quad',
@@ -192,7 +192,7 @@ const AllWork = () => {
           continue;
         }
       }
-      
+
       // Cas par défaut : vidéo seule
       groups.push({
         type: 'single',
@@ -201,7 +201,7 @@ const AllWork = () => {
       });
       i++;
     }
-    
+
     return groups;
   };
 
@@ -249,11 +249,10 @@ const AllWork = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-8 py-3 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 border ${
-                selectedCategory === cat
+              className={`px-8 py-3 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 border ${selectedCategory === cat
                   ? "bg-white text-black border-white scale-105"
                   : "bg-transparent text-zinc-500 hover:text-white border-white/10"
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -265,9 +264,9 @@ const AllWork = () => {
             {(() => {
               // Trier par ordre croissant et créer les groupes
               const sortedVideos = [...filteredVideos].sort((a, b) => (a.order || 0) - (b.order || 0));
-              
+
               const videoGroups = createVideoGroups(sortedVideos);
-              
+
               return videoGroups.map((group, groupIndex) => (
                 <React.Fragment key={`group-${groupIndex}`}>
                   {group.videos.map((video, videoIndex) => {
@@ -283,17 +282,13 @@ const AllWork = () => {
                     return (
                       <div
                         key={video.id}
-                        className={`relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${
-                          isVertical 
+                        className={`relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${isVertical
                             ? "aspect-[4/5] md:aspect-[9/16]" // Verticale : 4:5 mobile, 9:16 desktop
                             : "aspect-video" // Horizontales : toujours 16:9 pour éviter la déformation
-                        }`}
+                          }`}
                         onClick={() => handleThumbnailClick(video.youtubeId)} // Gère le clic (desktop + mobile)
                         onMouseEnter={() => handleVideoHover(video)}
                         onMouseLeave={() => setHoveredVideo(null)}
-                        onTouchStart={() => setHoveredVideo(video.youtubeId)}
-                        onTouchEnd={() => setHoveredVideo(null)}
-                        onTouchCancel={() => setHoveredVideo(null)}
                       >
                         <div className="absolute inset-0 w-full h-full">
                           {hoveredVideo === video.youtubeId ? (
@@ -303,7 +298,7 @@ const AllWork = () => {
                                 ref={(el) => {
                                   if (el && !el.dataset.initialized) {
                                     el.dataset.initialized = 'true';
-                                    
+
                                     // Utiliser l'élément préchargé si disponible
                                     const preloadedElement = preloadedVideosRef.current.get(video.youtubeId);
                                     if (preloadedElement) {
@@ -319,7 +314,7 @@ const AllWork = () => {
                                         // Format unique : copier src
                                         el.src = preloadedElement.src;
                                       }
-                                      
+
                                       // Copier les attributs
                                       el.preload = 'auto';
                                       el.muted = true;
@@ -329,18 +324,18 @@ const AllWork = () => {
                                     } else {
                                       // Fallback : créer les sources
                                       const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
-                                      
+
                                       if (video.previewClipUrl.includes('.webm')) {
                                         el.src = video.previewClipUrl;
                                       } else {
                                         const sourceWebM = document.createElement('source');
                                         sourceWebM.src = webmUrl;
                                         sourceWebM.type = 'video/webm';
-                                        
+
                                         const sourceMP4 = document.createElement('source');
                                         sourceMP4.src = video.previewClipUrl;
                                         sourceMP4.type = 'video/mp4';
-                                        
+
                                         el.appendChild(sourceWebM);
                                         el.appendChild(sourceMP4);
                                       }
@@ -359,7 +354,7 @@ const AllWork = () => {
                                 videoId={video.youtubeId}
                                 opts={{
                                   height: '100%',
-                                  width: '100%', 
+                                  width: '100%',
                                   playerVars: {
                                     autoplay: 1,
                                     controls: 0,
@@ -380,9 +375,8 @@ const AllWork = () => {
                             <img
                               src={thumbnailSrc}
                               alt={video.title}
-                              className={`w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${
-                                !isVertical ? 'object-center' : 'object-top'
-                              }`}
+                              className={`w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${!isVertical ? 'object-center' : 'object-top'
+                                }`}
                             />
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
@@ -419,17 +413,17 @@ const AllWork = () => {
         {/* Modal pour afficher le lecteur YouTube */}
         <Modal open={open} onClose={() => setOpen(false)}>
           <Box className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 outline-none w-[90vw] md:w-[80vw] max-w-[1200px] aspect-video bg-black shadow-2xl">
-             {selectedVideo && (
-               <YouTube 
-                 videoId={selectedVideo} 
-                 opts={{
-                   width: '100%',
-                   height: '100%',
-                   playerVars: { autoplay: 1 }
-                 }} 
-                 className="w-full h-full"
-               />
-             )}
+            {selectedVideo && (
+              <YouTube
+                videoId={selectedVideo}
+                opts={{
+                  width: '100%',
+                  height: '100%',
+                  playerVars: { autoplay: 1 }
+                }}
+                className="w-full h-full"
+              />
+            )}
           </Box>
         </Modal>
 
