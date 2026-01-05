@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Container, 
-  Button, 
-  Snackbar, 
-  Alert, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Container,
+  Button,
+  Snackbar,
+  Alert,
   TextField,
   Dialog,
   DialogTitle,
@@ -16,15 +16,18 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { getVideos, updateVideoOrder, saveVideo, deleteVideo } from '../../services/videosService';
+import { auth } from '../../firebase/client';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import VideoForm from '../../components/admin/VideoForm';
 import VideoList from '../../components/admin/VideoList';
 
 const AdminPage = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showLoginDialog, setShowLoginDialog] = useState(true);
-  
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -33,32 +36,43 @@ const AdminPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
 
-  // Vérification de l'authentification au montage
+  // Vérification de l'authentification avec Firebase
   useEffect(() => {
-    const auth = localStorage.getItem('admin_authenticated');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-      setShowLoginDialog(false);
-      fetchVideos();
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+        fetchVideos();
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoadingAuth(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleLogin = () => {
-    if (password === 'mikha-admin-2024') {
-      setIsAuthenticated(true);
-      setShowLoginDialog(false);
-      localStorage.setItem('admin_authenticated', 'true');
-      fetchVideos();
+  const handleLogin = async (e) => {
+    // Si c'est déclenché par le formulaire (Enter ou click), on évite le rechargement
+    if (e) e.preventDefault();
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       showSnackbar('Connexion réussie', 'success');
-    } else {
-      showSnackbar('Mot de passe incorrect', 'error');
+      // Le onAuthStateChanged gérera le reste
+    } catch (error) {
+      console.error("Erreur de connexion:", error);
+      showSnackbar('Email ou mot de passe incorrect', 'error');
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('admin_authenticated');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setVideos([]); // On vide la liste locale
+      navigate('/');
+    } catch (error) {
+      console.error("Erreur de déconnexion:", error);
+    }
   };
 
   // Charger les vidéos depuis Firestore (une seule fois au démarrage)
@@ -67,7 +81,7 @@ const AdminPage = () => {
       setLoading(true);
       setError(null);
       const videosData = await getVideos();
-      
+
       // Trier par ordre existant, puis réassigner ordre séquentiel local
       const sortedVideos = videosData
         .sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -75,7 +89,7 @@ const AdminPage = () => {
           ...video,
           order: index, // Ordre local : 0,1,2,3...
         }));
-      
+
       console.log('Vidéos chargées et ordonnées localement:', sortedVideos.map(v => ({ id: v.id, order: v.order })));
       setVideos(sortedVideos);
     } catch (err) {
@@ -95,7 +109,7 @@ const AdminPage = () => {
         ...video,
         order: index
       }));
-      
+
       await updateVideoOrder(videosWithOrder);
       console.log('Ordre synchronisé avec Firebase');
     } catch (error) {
@@ -119,7 +133,7 @@ const AdminPage = () => {
     try {
       // Mise à jour immédiate de l'UI (pas d'attente)
       setVideos(reorderedVideos);
-      
+
       // Synchronisation en arrière-plan (non bloquante)
       try {
         await syncOrderWithFirebase(reorderedVideos);
@@ -154,9 +168,9 @@ const AdminPage = () => {
 
     // 1. Sauvegarde pour rollback et mise à jour UI immédiate
     const backupVideos = [...videos];
-    setVideos(prev => prev.filter(v => 
-      (v.firestoreId !== videoId) && 
-      (v.id !== videoId) && 
+    setVideos(prev => prev.filter(v =>
+      (v.firestoreId !== videoId) &&
+      (v.id !== videoId) &&
       (v.youtubeId !== videoId)
     ));
 
@@ -164,14 +178,14 @@ const AdminPage = () => {
       // 2. Appel au service Firebase
       await deleteVideo(videoId);
       showSnackbar('Vidéo supprimée avec succès');
-      
+
       // 3. Rafraîchissement silencieux pour synchroniser l'état exact
       const freshData = await getVideos();
       setVideos(freshData.sort((a, b) => a.order - b.order));
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
       showSnackbar(error.message || 'Erreur lors de la suppression', 'error');
-      
+
       // 4. Rollback en cas d'erreur serveur
       setVideos(backupVideos);
     }
@@ -181,30 +195,30 @@ const AdminPage = () => {
   const handleSaveVideo = async (videoData) => {
     try {
       setIsSaving(true);
-      
+
       const videoToSave = {
         ...videoData,
-        category: Array.isArray(videoData.category) 
-          ? videoData.category 
+        category: Array.isArray(videoData.category)
+          ? videoData.category
           : videoData.category ? [videoData.category] : [],
         order: typeof videoData.order === 'number' ? videoData.order : videos.length,
         date: videoData.date || new Date().toISOString().split('T')[0],
       };
-      
+
       // Si c'est une modification, s'assurer qu'on a le bon ID Firestore
       if (currentVideo && currentVideo.firestoreId) {
         videoToSave.firestoreId = currentVideo.firestoreId;
       }
-      
+
       await saveVideo(videoToSave);
-      
+
       // Rechargement complet pour s'assurer que l'ID Firestore est bien récupéré
       await fetchVideos();
-      
+
       showSnackbar('Vidéo enregistrée avec succès');
       setIsEditing(false);
       setCurrentVideo(null);
-      
+
     } catch (error) {
       console.error('Erreur sauvegarde:', error);
       showSnackbar('Erreur lors de la sauvegarde', 'error');
@@ -213,28 +227,52 @@ const AdminPage = () => {
     }
   };
 
+  // Écran de chargement initial
+  if (loadingAuth) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Typography>Chargement...</Typography>
+      </Box>
+    );
+  }
+
   // Écran de Login
   if (!isAuthenticated) {
     return (
-      <Dialog open={showLoginDialog} maxWidth="sm" fullWidth>
+      <Dialog open={true} maxWidth="sm" fullWidth>
         <DialogTitle>Connexion Administrateur</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Mot de passe"
-            type="password"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-          />
+          <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Adresse Email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mot de passe"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <DialogActions sx={{ px: 0, mt: 2 }}>
+              <Button onClick={() => navigate('/')}>Retour au site</Button>
+              <Button type="submit" variant="contained">Se connecter</Button>
+            </DialogActions>
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => navigate('/')}>Annuler</Button>
-          <Button onClick={handleLogin} variant="contained">Se connecter</Button>
-        </DialogActions>
       </Dialog>
     );
   }
@@ -267,7 +305,7 @@ const AdminPage = () => {
             <Button onClick={fetchVideos} sx={{ mt: 1 }}>Réessayer</Button>
           </Box>
         ) : (
-          <VideoList 
+          <VideoList
             videos={videos}
             onVideosUpdate={handleSaveOrder}
             onEdit={handleEditVideo}
@@ -277,9 +315,9 @@ const AdminPage = () => {
         )}
       </Paper>
 
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={4000} 
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
       >
         <Alert severity={snackbar.severity} sx={{ width: '100%' }} onClose={handleCloseSnackbar}>
