@@ -180,57 +180,6 @@ const AllWork = () => {
       const currentVideo = videos[i];
       const currentIsVertical = currentVideo.orientation === "vertical" || currentVideo.category?.includes("Vidéos courtes");
 
-      // ... logic skipped for brevity, relies on existing code context ...
-      // Wait, replacement content MUST be complete for the chunk.
-      // I need to be careful not to break the `createVideoGroups` logic if I don't include it all.
-      // The TargetContent above starts at line 110.
-      // I will only include down to `handleThumbnailClick` to avoid rewriting the logic for createVideoGroups if possible, 
-      // but the instructions ask to add class to the div which is further down.
-      // Ah, I see "Instruction: Add 'video-card' class...". This requires TWO chunks if I use `replace_file_content`? 
-      // Or I can use `multi_replace_file_content`.
-      // The tool `replace_file_content` is only for SINGLE CONTIGUOUS block.
-      // So I should use `multi_replace_file_content` or just do it in two steps?
-      // Wait, the prompt for `replace_file_content` says "use ... ONLY when making a SINGLE CONTIGUOUS block".
-      // I need to change `handleVideoHover` (line 111) AND the `div` (line 286).
-      // These are far apart.
-      // I MUST use `multi_replace_file_content`.
-
-      return; // canceling this thought to switch tool
-    }
-  };
-
-  const opts = {
-    playerVars: {
-      autoplay: 1,
-      controls: 0,
-    },
-  };
-
-  // Utiliser uniquement les vidéos de Firebase, triées par ordre croissant
-  const allVideos = remoteVideos
-    .filter((video) => video.visible !== false)
-    .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordre 0,1,2,3... du haut vers le bas
-
-  // Fonction pour filtrer les vidéos selon la catégorie
-  const filteredVideos = selectedCategory === "Toutes les vidéos"
-    ? allVideos
-    : allVideos.filter(video => video.category?.includes(selectedCategory));
-
-  // Fonction pour gérer la sélection d'une vidéo
-  const handleThumbnailClick = (videoId) => {
-    setSelectedVideo(videoId);
-    setOpen(true); // Ouvre le modal
-  };
-
-  // Fonction pour créer des groupes de vidéos optimisés pour l'affichage
-  const createVideoGroups = (videos) => {
-    const groups = [];
-    let i = 0;
-
-    while (i < videos.length) {
-      const currentVideo = videos[i];
-      const currentIsVertical = currentVideo.orientation === "vertical" || currentVideo.category?.includes("Vidéos courtes");
-
       // Vérifier si on peut former un groupe avec les vidéos suivantes
       if (i < videos.length - 1) {
         const nextVideo = videos[i + 1];
