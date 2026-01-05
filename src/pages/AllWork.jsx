@@ -107,9 +107,96 @@ const AllWork = () => {
     };
   }, []);
 
+  // Scroll Autoplay pour Mobile (Style TikTok/Instagram)
+  useEffect(() => {
+    // Ne rien faire sur desktop (si le survol est supporté)
+    if (window.matchMedia('(hover: hover)').matches) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Trouver la vidéo la plus visible
+        let maxRatio = 0;
+        let bestCandidate = null;
+
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+            maxRatio = entry.intersectionRatio;
+            bestCandidate = entry.target;
+          }
+        });
+
+        if (bestCandidate) {
+          const videoId = bestCandidate.dataset.videoId;
+          if (videoId) setHoveredVideo(videoId);
+        }
+      },
+      { threshold: 0.6 } // Déclencher quand 60% de la vidéo est visible
+    );
+
+    // Observer toutes les cartes vidéo
+    const elements = document.querySelectorAll('.video-card');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [remoteVideos, selectedCategory, menuOpen]); // Écouter les changements
+
   // Gestionnaire de survol optimisé
   const handleVideoHover = (video) => {
-    setHoveredVideo(video.youtubeId);
+    // Sur desktop seulement
+    if (window.matchMedia('(hover: hover)').matches) {
+      setHoveredVideo(video.youtubeId);
+    }
+  };
+
+  const opts = {
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+    },
+  };
+
+  // Utiliser uniquement les vidéos de Firebase, triées par ordre croissant
+  const allVideos = remoteVideos
+    .filter((video) => video.visible !== false)
+    .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordre 0,1,2,3... du haut vers le bas
+
+  // Fonction pour filtrer les vidéos selon la catégorie
+  const filteredVideos = selectedCategory === "Toutes les vidéos"
+    ? allVideos
+    : allVideos.filter(video => video.category?.includes(selectedCategory));
+
+  // Fonction pour gérer la sélection d'une vidéo
+  const handleThumbnailClick = (videoId) => {
+    setSelectedVideo(videoId);
+    setOpen(true); // Ouvre le modal
+  };
+
+  // Fonction pour créer des groupes de vidéos optimisés pour l'affichage
+  const createVideoGroups = (videos) => {
+    const groups = [];
+    let i = 0;
+
+    while (i < videos.length) {
+      const currentVideo = videos[i];
+      const currentIsVertical = currentVideo.orientation === "vertical" || currentVideo.category?.includes("Vidéos courtes");
+
+      // ... logic skipped for brevity, relies on existing code context ...
+      // Wait, replacement content MUST be complete for the chunk.
+      // I need to be careful not to break the `createVideoGroups` logic if I don't include it all.
+      // The TargetContent above starts at line 110.
+      // I will only include down to `handleThumbnailClick` to avoid rewriting the logic for createVideoGroups if possible, 
+      // but the instructions ask to add class to the div which is further down.
+      // Ah, I see "Instruction: Add 'video-card' class...". This requires TWO chunks if I use `replace_file_content`? 
+      // Or I can use `multi_replace_file_content`.
+      // The tool `replace_file_content` is only for SINGLE CONTIGUOUS block.
+      // So I should use `multi_replace_file_content` or just do it in two steps?
+      // Wait, the prompt for `replace_file_content` says "use ... ONLY when making a SINGLE CONTIGUOUS block".
+      // I need to change `handleVideoHover` (line 111) AND the `div` (line 286).
+      // These are far apart.
+      // I MUST use `multi_replace_file_content`.
+
+      return; // canceling this thought to switch tool
+    }
   };
 
   const opts = {
@@ -250,8 +337,8 @@ const AllWork = () => {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-8 py-3 rounded-xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 border ${selectedCategory === cat
-                  ? "bg-white text-black border-white scale-105"
-                  : "bg-transparent text-zinc-500 hover:text-white border-white/10"
+                ? "bg-white text-black border-white scale-105"
+                : "bg-transparent text-zinc-500 hover:text-white border-white/10"
                 }`}
             >
               {cat}
@@ -282,9 +369,10 @@ const AllWork = () => {
                     return (
                       <div
                         key={video.id}
-                        className={`relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${isVertical
-                            ? "aspect-[4/5] md:aspect-[9/16]" // Verticale : 4:5 mobile, 9:16 desktop
-                            : "aspect-video" // Horizontales : toujours 16:9 pour éviter la déformation
+                        data-video-id={video.youtubeId} // ID pour l'observer
+                        className={`video-card relative group bg-black overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 hover:border-white/20 ${colSpan} ${isVertical
+                          ? "aspect-[4/5] md:aspect-[9/16]" // Verticale : 4:5 mobile, 9:16 desktop
+                          : "aspect-video" // Horizontales : toujours 16:9 pour éviter la déformation
                           }`}
                         onClick={() => handleThumbnailClick(video.youtubeId)} // Gère le clic (desktop + mobile)
                         onMouseEnter={() => handleVideoHover(video)}
