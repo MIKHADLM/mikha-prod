@@ -1,6 +1,8 @@
 node_modules
 .DS_Store
 
+
 # Ignorer les fichiers d'environnement
 .env
+.env.local
 node_modules/
