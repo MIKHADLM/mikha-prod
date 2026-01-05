@@ -8,7 +8,28 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  'https://www.mikhaprod.com',
+  'https://mikhaprod.com',
+  'http://localhost:5173', // Vite dev local
+  'http://localhost:3000'  // Au cas où
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests) ?? 
+    // Pour la sécurité stricte d'un site web, on peut refuser no origin, 
+    // mais pour le dev localhost parfois l'origin est null.
+    // Ici on autorise si pas d'origin (ex: appel serveur à serveur) ou si dans la liste.
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'La politique CORS de ce site interdit l\'accès depuis cette origine.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 app.use(bodyParser.json());
 
 // Configuration de Nodemailer avec les variables d'environnement
