@@ -328,95 +328,116 @@ const AllWork = () => {
                         onMouseLeave={() => setHoveredVideo(null)}
                       >
                         <div className="absolute inset-0 w-full h-full">
-                          {hoveredVideo === video.youtubeId ? (
-                            video.previewClipUrl ? (
-                              <video
-                                key={video.youtubeId}
-                                ref={(el) => {
-                                  if (el && !el.dataset.initialized) {
-                                    el.dataset.initialized = 'true';
+                          {/* Image de fond (Toujours présente pour éviter l'écran noir) */}
+                          <img
+                            src={thumbnailSrc}
+                            alt={video.title}
+                            className={`w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${!isVertical ? 'object-center' : 'object-top'
+                              }`}
+                          />
 
-                                    // Utiliser l'élément préchargé si disponible
-                                    const preloadedElement = preloadedVideosRef.current.get(video.youtubeId);
-                                    if (preloadedElement) {
-                                      // Cloner les sources de l'élément préchargé
-                                      const sources = preloadedElement.querySelectorAll('source');
-                                      if (sources.length > 0) {
-                                        // Multi-format : copier les sources
-                                        sources.forEach(source => {
-                                          const newSource = source.cloneNode(true);
-                                          el.appendChild(newSource);
-                                        });
-                                      } else {
-                                        // Format unique : copier src
-                                        el.src = preloadedElement.src;
+                          {/* Vidéo en surimpression (Si survolée) */}
+                          {hoveredVideo === video.youtubeId && (
+                            <>
+                              {/* Spinner de chargement (z-10) */}
+                              <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                              </div>
+
+                              <div className="absolute inset-0 w-full h-full z-20">
+                                {video.previewClipUrl ? (
+                                  <video
+                                    key={video.youtubeId}
+                                    ref={(el) => {
+                                      if (el && !el.dataset.initialized) {
+                                        el.dataset.initialized = 'true';
+
+                                        // Initialement transparent
+                                        el.style.opacity = '0';
+                                        el.style.transition = 'opacity 0.5s ease-in-out';
+
+                                        // Utiliser l'élément préchargé si disponible
+                                        const preloadedElement = preloadedVideosRef.current.get(video.youtubeId);
+                                        if (preloadedElement) {
+                                          // Cloner les sources
+                                          const sources = preloadedElement.querySelectorAll('source');
+                                          if (sources.length > 0) {
+                                            sources.forEach(source => {
+                                              el.appendChild(source.cloneNode(true));
+                                            });
+                                          } else {
+                                            el.src = preloadedElement.src;
+                                          }
+
+                                          // Attributs
+                                          el.preload = 'auto'; // Important pour mobile
+                                          el.muted = true;
+                                          el.loop = true;
+                                          el.playsInline = true;
+
+                                          // Activer le fade-in quand prêt
+                                          el.oncanplay = () => {
+                                            el.style.opacity = '1';
+                                            el.play().catch(() => { }); // Tentative de lecture
+                                          };
+
+                                          el.load();
+                                        } else {
+                                          // Fallback
+                                          const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
+                                          if (video.previewClipUrl.includes('.webm')) {
+                                            el.src = video.previewClipUrl;
+                                          } else {
+                                            const sourceWebM = document.createElement('source');
+                                            sourceWebM.src = webmUrl;
+                                            sourceWebM.type = 'video/webm';
+                                            const sourceMP4 = document.createElement('source');
+                                            sourceMP4.src = video.previewClipUrl;
+                                            sourceMP4.type = 'video/mp4';
+                                            el.appendChild(sourceWebM);
+                                            el.appendChild(sourceMP4);
+                                          }
+
+                                          // Activer le fade-in quand prêt (même pour fallback)
+                                          el.oncanplay = () => {
+                                            el.style.opacity = '1';
+                                          };
+                                        }
                                       }
-
-                                      // Copier les attributs
-                                      el.preload = 'auto';
-                                      el.muted = true;
-                                      el.loop = true;
-                                      el.playsInline = true;
-                                      el.load();
-                                    } else {
-                                      // Fallback : créer les sources
-                                      const webmUrl = video.previewClipUrl.replace('.mp4', '.webm');
-
-                                      if (video.previewClipUrl.includes('.webm')) {
-                                        el.src = video.previewClipUrl;
-                                      } else {
-                                        const sourceWebM = document.createElement('source');
-                                        sourceWebM.src = webmUrl;
-                                        sourceWebM.type = 'video/webm';
-
-                                        const sourceMP4 = document.createElement('source');
-                                        sourceMP4.src = video.previewClipUrl;
-                                        sourceMP4.type = 'video/mp4';
-
-                                        el.appendChild(sourceWebM);
-                                        el.appendChild(sourceMP4);
-                                      }
-                                    }
-                                  }
-                                }}
-                                className="w-full h-full object-cover pointer-events-none"
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                preload="auto"
-                              />
-                            ) : (
-                              <YouTube
-                                videoId={video.youtubeId}
-                                opts={{
-                                  height: '100%',
-                                  width: '100%',
-                                  playerVars: {
-                                    autoplay: 1,
-                                    controls: 0,
-                                    mute: 1,
-                                    rel: 0,
-                                    modestbranding: 1,
-                                    loop: 1,
-                                    playlist: video.youtubeId,
-                                  },
-                                }}
-                                className="w-full h-full pointer-events-none"
-                                onReady={(event) => {
-                                  event.target.playVideo();
-                                }}
-                              />
-                            )
-                          ) : (
-                            <img
-                              src={thumbnailSrc}
-                              alt={video.title}
-                              className={`w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${!isVertical ? 'object-center' : 'object-top'
-                                }`}
-                            />
+                                    }}
+                                    className="w-full h-full object-cover pointer-events-none"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="auto"
+                                  />
+                                ) : (
+                                  <YouTube
+                                    videoId={video.youtubeId}
+                                    opts={{
+                                      height: '100%',
+                                      width: '100%',
+                                      playerVars: {
+                                        autoplay: 1,
+                                        controls: 0,
+                                        mute: 1,
+                                        rel: 0,
+                                        modestbranding: 1,
+                                        loop: 1,
+                                        playlist: video.youtubeId,
+                                      },
+                                    }}
+                                    className="w-full h-full pointer-events-none"
+                                    onReady={(event) => {
+                                      event.target.playVideo();
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            </>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 z-20" />
                         </div>
 
                         {/* Badge */}
