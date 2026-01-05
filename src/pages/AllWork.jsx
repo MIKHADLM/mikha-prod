@@ -107,40 +107,7 @@ const AllWork = () => {
     };
   }, []);
 
-  // Scroll Autoplay pour Mobile (Style TikTok/Instagram)
-  useEffect(() => {
-    // Ne rien faire sur desktop (si le survol est supporté)
-    if (window.matchMedia('(hover: hover)').matches) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Trouver la vidéo la plus visible
-        let maxRatio = 0;
-        let bestCandidate = null;
-
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            bestCandidate = entry.target;
-          }
-        });
-
-        if (bestCandidate) {
-          const videoId = bestCandidate.dataset.videoId;
-          if (videoId) setHoveredVideo(videoId);
-        }
-      },
-      { threshold: 0.6 } // Déclencher quand 60% de la vidéo est visible
-    );
-
-    // Observer toutes les cartes vidéo
-    const elements = document.querySelectorAll('.video-card');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [remoteVideos, selectedCategory, menuOpen]); // Écouter les changements
-
-  // Gestionnaire de survol optimisé
   const handleVideoHover = (video) => {
     // Sur desktop seulement
     if (window.matchMedia('(hover: hover)').matches) {
@@ -326,6 +293,8 @@ const AllWork = () => {
                         onClick={() => handleThumbnailClick(video.youtubeId)} // Gère le clic (desktop + mobile)
                         onMouseEnter={() => handleVideoHover(video)}
                         onMouseLeave={() => setHoveredVideo(null)}
+                        onTouchStart={() => setHoveredVideo(video.youtubeId)} // Mobile : Toucher pour voir preview
+                        onTouchEnd={() => setHoveredVideo(null)} // Relâcher pour arrêter
                       >
                         <div className="absolute inset-0 w-full h-full">
                           {/* Image de fond (Toujours présente pour éviter l'écran noir) */}
